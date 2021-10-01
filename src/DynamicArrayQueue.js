@@ -3,10 +3,6 @@ class DynamicArrayQueue {
         this._arr = [];
     }
 
-    size() {
-        return this._arr.length;
-    }
-
     enqueue(item) {
         this._arr.push(item);
     }
@@ -15,12 +11,16 @@ class DynamicArrayQueue {
         return this._arr.shift();
     }
 
+    size() {
+        return this._arr.length;
+    }
+
     peekNewest() {
         const length = this._arr.length;
         if (length === 0) {
             throw new Error('cannot peek from an empty queue');
         }
-        return this._arr[length-1];
+        return this._arr[length - 1];
     }
 
     peekOldest() {
@@ -47,7 +47,7 @@ class DynamicArrayQueue {
         return {
             [Symbol.iterator]: function () {
                 return {
-                    next: function() {
+                    next: function () {
                         if (me.size() === 0) {
                             return {done: true};
                         } else {
@@ -79,4 +79,4 @@ class DynamicArrayQueue {
     }
 }
 
-module.exports = { DynamicArrayQueue }
+module.exports = {DynamicArrayQueue}
