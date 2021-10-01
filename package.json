@@ -7,6 +7,6 @@
     "seedrandom": "^3.0.5"
   },
   "scripts": {
-    "test-node": "mocha test/ --recursive --check-leaks"
+    "test-node": "mocha test/ --recursive --check-leaks --require test/src/setup.js"
   }
 }

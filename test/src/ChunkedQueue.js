@@ -1,4 +1,3 @@
-const seedrandom = require('seedrandom');
 const { ChunkedQueue } = require('../../src/ChunkedQueue');
 const assert = require('assert');
 
@@ -15,13 +14,6 @@ function randomNumbers(n) {
 }
 
 describe('ChunkedQueue', () => {
-    before('global_random_seed', () => {
-        const now = new Date().toISOString();
-        console.log(`seed = ${now}`);
-        seedrandom(now, { global: true });
-
-    });
-
     it('can construct', () => {
         new ChunkedQueue();
     });
