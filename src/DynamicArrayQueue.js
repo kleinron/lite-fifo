@@ -38,7 +38,7 @@ class DynamicArrayQueue {
             }
         }
 
-        return generator();
+        return generator.bind(this).call();
     }
 
     drainingIterator() {

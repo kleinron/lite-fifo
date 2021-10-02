@@ -16,13 +16,17 @@ class CyclicQueue {
         this._oldestIndex = 0
     }
 
+    capacity() {
+        return this._arr.length;
+    }
+
     size() {
         return this._size;
     }
 
     enqueue(item) {
         if (this._size === this._arr.length) {
-            throw new Error('cannot enqueue to full capacity');
+            throw new Error('queue overflow');
         }
         this._arr[this._newestIndex] = item;
         this._newestIndex = this._increaseMod(this._newestIndex);
@@ -39,7 +43,7 @@ class CyclicQueue {
 
     dequeue() {
         if (this._size === 0) {
-            throw new Error('cannot dequeue from an empty queue');
+            throw new Error('queue underflow');
         }
         const result = this._arr[this._oldestIndex];
         this._arr[this._oldestIndex] = null;
