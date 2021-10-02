@@ -8,11 +8,9 @@ function randomNumber(limit) {
     return Math.floor(Math.random() * (limit ? limit : 50));
 }
 
-const FIXED_QUEUES_MAX_CAPACITY = 10000;
-
 describe('Common API for all implementations', () => {
     const randomChunkSize = 1 + randomNumber();
-    const randomCapacity = 1 + randomNumber(FIXED_QUEUES_MAX_CAPACITY);
+    const randomCapacity = 1 + randomNumber(10000);
     const queueFactories = [
         { name: 'LinkedQueue', create: () => new LinkedQueue() },
         { name: 'DynamicArrayQueue', create: () => new DynamicArrayQueue() },
@@ -169,6 +167,4 @@ describe('Common API for all implementations', () => {
             }
         });
     }
-
-
 });
