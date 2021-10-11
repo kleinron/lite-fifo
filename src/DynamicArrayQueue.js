@@ -15,7 +15,7 @@ class DynamicArrayQueue {
         return this._arr.length;
     }
 
-    peekNewest() {
+    peekLast() {
         const length = this._arr.length;
         if (length === 0) {
             throw new Error('cannot peek from an empty queue');
@@ -23,7 +23,7 @@ class DynamicArrayQueue {
         return this._arr[length - 1];
     }
 
-    peekOldest() {
+    peekFirst() {
         const length = this._arr.length;
         if (length === 0) {
             throw new Error('cannot peek from an empty queue');
@@ -46,15 +46,13 @@ class DynamicArrayQueue {
 
         return {
             [Symbol.iterator]: function () {
-                return {
-                    next: function () {
-                        if (me.size() === 0) {
-                            return {done: true};
-                        } else {
-                            return {done: false, value: me.dequeue()};
-                        }
+                function* generator() {
+                    while (me.size() > 0) {
+                        yield me.dequeue();
                     }
                 }
+
+                return generator.bind(me).call();
             }
         }
     }

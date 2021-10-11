@@ -1,25 +1,18 @@
 const { LinkedQueue } = require('../src/LinkedQueue');
 const { ChunkedQueue } = require('../src/ChunkedQueue');
+const { DynamicArrayQueue } = require('../src/DynamicArrayQueue');
 
 function main(className, chunkSize, counts) {
     let cls;
-    let enqueue;
-    let dequeue;
     switch (className.toLowerCase()) {
         case 'LinkedQueue'.toLowerCase():
             cls = () => new LinkedQueue();
-            enqueue = (q, v) => q.enqueue(v);
-            dequeue = (q) => q.dequeue();
             break;
         case 'ChunkedQueue'.toLowerCase():
             cls = () => new ChunkedQueue(chunkSize);
-            enqueue = (q, v) => q.enqueue(v);
-            dequeue = (q) => q.dequeue();
             break;
-        case 'array'.toLowerCase():
-            cls = () => [];
-            enqueue = (a, v) => a.push(v);
-            dequeue = (a) => a.shift();
+        case 'DynamicArrayQueue'.toLowerCase():
+            cls = () => new DynamicArrayQueue();
             break;
         default:
             throw new Error(`no matching class found for class ${className}`);
@@ -33,11 +26,11 @@ function main(className, chunkSize, counts) {
         opIndex = 1 - opIndex;
         if (opIndex === 0) { // enqueue
             for (let i = 0; i < count; i++) {
-                enqueue(queue, 88776655);
+                queue.enqueue(88776655);
             }
         } else {
             for (let i = 0; i < count; i++) {
-                dequeue(queue);
+                queue.dequeue();
             }
         }
     }
@@ -61,4 +54,4 @@ if (className.includes('-')) {
     chunkSize = Number.parseInt(tokens[1]);
 }
 const counts = process.argv.slice(3).map(x => Number.parseInt(x));
-main(className, chunkSize, counts)
+main(className, chunkSize, counts);
