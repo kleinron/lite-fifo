@@ -41,14 +41,14 @@ class LinkedQueue {
         return result;
     }
 
-    peekNewest() {
+    peekLast() {
         if (this._size === 0) {
             throw new Error('cannot peek from an empty queue');
         }
         return this._newest[VALUE];
     }
 
-    peekOldest() {
+    peekFirst() {
         if (this._size === 0) {
             throw new Error('cannot peek from an empty queue');
         }

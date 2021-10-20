@@ -52,14 +52,14 @@ class CyclicQueue {
         return result;
     }
 
-    peekNewest() {
+    peekLast() {
         if (this._size === 0) {
             throw new Error('cannot peek from an empty queue');
         }
         return this._arr[this._decreaseMod(this._newestIndex)];
     }
 
-    peekOldest() {
+    peekFirst() {
         if (this._size === 0) {
             throw new Error('cannot peek from an empty queue');
         }

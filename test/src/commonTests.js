@@ -69,6 +69,81 @@ describe('Common API for all implementations', () => {
                 assert.throws(queue.dequeue);
             });
 
+            describe('peekFirst', () => {
+                it('raises an exception on an empty queue', () => {
+                    const queue = queueFactory.create();
+                    assert.throws(queue.peekFirst);
+                });
+
+                it('returns the first item after a single enqueue action', () => {
+                    const queue = queueFactory.create();
+                    queue.enqueue(123);
+                    assert.strictEqual(queue.peekFirst(), 123);
+                });
+
+                it('returns the first item after several enqueue actions', () => {
+                    const queue = queueFactory.create();
+                    const number = randomNumber(600);
+                    queue.enqueue(number);
+
+                    const n = randomNumber(queue.capacity ? queue.capacity() : undefined);
+                    for (let i = 0; i < n; i++) {
+                        queue.enqueue(randomNumber());
+                    }
+                    assert.strictEqual(queue.peekFirst(), number);
+                });
+
+                it('returns the first item after enqueue-dequeue-enqueue', () => {
+                    const queue = queueFactory.create();
+                    const number1 = randomNumber(600);
+                    queue.enqueue(number1);
+                    queue.dequeue();
+                    const number2 = randomNumber(600);
+                    queue.enqueue(number2);
+
+                    assert.strictEqual(queue.peekFirst(), number2);
+                });
+
+            });
+
+            describe('peekLast', () => {
+                it('raises an exception on an empty queue', () => {
+                    const queue = queueFactory.create();
+                    assert.throws(queue.peekLast);
+                });
+
+                it('returns the last item after a single enqueue action', () => {
+                    const queue = queueFactory.create();
+                    queue.enqueue(123);
+                    assert.strictEqual(queue.peekLast(), 123);
+                });
+
+                it('returns the last item after several enqueue actions', () => {
+                    const queue = queueFactory.create();
+                    const numbers = [];
+                    const n = Math.max(1, randomNumber(queue.capacity ? queue.capacity() : undefined));
+                    for (let i = 0; i < n; i++) {
+                        numbers[i] = randomNumber();
+                    }
+
+                    numbers.forEach(num => queue.enqueue(num));
+
+                    assert.strictEqual(queue.peekLast(), numbers[numbers.length - 1]);
+                });
+
+                it('returns the last item after enqueue-dequeue-enqueue', () => {
+                    const queue = queueFactory.create();
+                    const number1 = randomNumber(600);
+                    queue.enqueue(number1);
+                    queue.dequeue();
+                    const number2 = randomNumber(600);
+                    queue.enqueue(number2);
+
+                    assert.strictEqual(queue.peekLast(), number2);
+                });
+
+            });
+
             describe('size', () => {
                 it('new instance returns 0', () => {
                     assert.strictEqual(new LinkedQueue().size(), 0);

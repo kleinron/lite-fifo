@@ -21,7 +21,7 @@ class ChunkedQueue {
         if (this._queue.size() === 0) {
             this._queue.enqueue(new CyclicQueue(this._chunkSize));
         }
-        let newestChunk = this._queue.peekNewest();
+        let newestChunk = this._queue.peekLast();
         if (newestChunk.size() === this._chunkSize) {
             newestChunk = new CyclicQueue(this._chunkSize);
             this._queue.enqueue(newestChunk);
@@ -30,7 +30,7 @@ class ChunkedQueue {
     }
 
     dequeue() {
-        let oldestChunk = this._queue.peekOldest();
+        let oldestChunk = this._queue.peekFirst();
         const result = oldestChunk.dequeue();
         if (oldestChunk.size() === 0) {
             this._queue.dequeue();
@@ -44,27 +44,27 @@ class ChunkedQueue {
             case 0:
                 return 0;
             case 1:
-                return this._queue.peekNewest().size();
+                return this._queue.peekLast().size();
             default:
-                const newestSize = this._queue.peekNewest().size();
-                const oldestSize = this._queue.peekOldest().size();
+                const newestSize = this._queue.peekLast().size();
+                const oldestSize = this._queue.peekFirst().size();
                 const innerSize = (size - 2) * this._chunkSize;
                 return newestSize + oldestSize + innerSize;
         }
     }
 
-    peekNewest() {
+    peekLast() {
         if (this.size() === 0) {
             throw new Error('cannot peek from an empty queue');
         }
-        return this._queue.peekNewest().peekNewest();
+        return this._queue.peekLast().peekLast();
     }
 
-    peekOldest() {
+    peekFirst() {
         if (this.size() === 0) {
             throw new Error('cannot peek from an empty queue');
         }
-        return this._queue.peekOldest().peekOldest();
+        return this._queue.peekFirst().peekFirst();
     }
 
     [Symbol.iterator]() {
