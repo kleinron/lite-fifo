@@ -1,5 +1,6 @@
-const { LinkedQueue } = require('./LinkedQueue')
-const { CyclicQueue } = require('./CyclicQueue')
+const { LinkedQueue } = require('./LinkedQueue');
+const { CyclicQueue } = require('./CyclicQueue');
+const { bindMethods } = require('./util');
 
 class ChunkedQueue {
     constructor(chunkSize) {
@@ -15,6 +16,7 @@ class ChunkedQueue {
         }
         this._queue = new LinkedQueue();
         this._chunkSize = chunkSize;
+        bindMethods.call(this);
     }
 
     clear() {

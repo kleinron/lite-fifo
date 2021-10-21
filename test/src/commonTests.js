@@ -62,7 +62,7 @@ describe('Common API for all implementations', () => {
                 for (let i = 0; i < n; i++) {
                     numbers[i] = randomNumber();
                 }
-                numbers.forEach(number => queue.enqueue(number));
+                numbers.forEach(queue.enqueue);
                 while (queue.size() !== 0) {
                     queue.dequeue();
                 }
@@ -187,13 +187,12 @@ describe('Common API for all implementations', () => {
                     assert.strictEqual(queue.size(), 0);
                 });
 
-                it('clears after enqueue returns 1', () => {
+                it('clears after enqueue', () => {
                     const queue = queueFactory.create();
                     queue.enqueue(123);
                     queue.clear();
                     assert.strictEqual(queue.size(), 0);
                 });
-
             });
 
             it('converts to json as an array', () => {
@@ -203,7 +202,7 @@ describe('Common API for all implementations', () => {
                 for (let i = 0; i < n; i++) {
                     numbers[i] = randomNumber();
                 }
-                numbers.forEach(number => queue.enqueue(number));
+                numbers.forEach(queue.enqueue);
                 const queueAsJson = JSON.stringify(queue);
                 assert.strictEqual(queueAsJson, JSON.stringify(numbers));
             });

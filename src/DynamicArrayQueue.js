@@ -1,6 +1,9 @@
+const {bindMethods} = require("./util");
+
 class DynamicArrayQueue {
     constructor() {
         this._arr = [];
+        bindMethods.call(this);
     }
 
     clear() {
@@ -12,6 +15,10 @@ class DynamicArrayQueue {
     }
 
     dequeue() {
+        if (this._arr.length === 0) {
+            throw new Error('cannot dequeue from an empty queue');
+        }
+
         return this._arr.shift();
     }
 

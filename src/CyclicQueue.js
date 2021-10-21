@@ -1,3 +1,5 @@
+const {bindMethods} = require("./util");
+
 class CyclicQueue {
     constructor(capacity) {
         if (capacity === undefined) {
@@ -10,6 +12,7 @@ class CyclicQueue {
         if (capacity <= 0) {
             throw new Error(`capacity must be positive (current value is ${capacity})`);
         }
+        bindMethods.call(this);
         this.clear();
     }
 

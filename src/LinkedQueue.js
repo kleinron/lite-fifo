@@ -1,8 +1,10 @@
+const {bindMethods} = require("./util");
 const VALUE = 0;
 const NEXT = 1;
 
 class LinkedQueue {
     constructor() {
+        bindMethods.call(this);
         this.clear();
     }
 
