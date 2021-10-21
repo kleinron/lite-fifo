@@ -146,7 +146,7 @@ describe('Common API for all implementations', () => {
 
             describe('size', () => {
                 it('new instance returns 0', () => {
-                    assert.strictEqual(new LinkedQueue().size(), 0);
+                    assert.strictEqual(queueFactory.create().size(), 0);
                 });
 
                 it('after enqueue returns 1', () => {
@@ -180,6 +180,22 @@ describe('Common API for all implementations', () => {
                 });
             });
 
+            describe('clear', () => {
+                it('clears a new instance', () => {
+                    const queue = queueFactory.create();
+                    queue.clear();
+                    assert.strictEqual(queue.size(), 0);
+                });
+
+                it('clears after enqueue returns 1', () => {
+                    const queue = queueFactory.create();
+                    queue.enqueue(123);
+                    queue.clear();
+                    assert.strictEqual(queue.size(), 0);
+                });
+
+            });
+
             it('converts to json as an array', () => {
                 const queue = queueFactory.create();
                 const numbers = [];
@@ -197,6 +213,20 @@ describe('Common API for all implementations', () => {
                 for (let item of queue) {
                     assert.fail("should not have any item");
                 }
+            });
+
+            it('clears after N enqueues and K dequeues', () => {
+                const queue = queueFactory.create();
+                const n = Math.max(1, randomNumber(queue.capacity ? queue.capacity() : undefined));                    const k = Math.floor(Math.random() * n);
+                for (let i = 0; i < n; i++) {
+                    const item = randomNumber();
+                    queue.enqueue(item);
+                }
+                for (let i = 0; i < k; i++) {
+                    queue.dequeue();
+                }
+                queue.clear();
+                assert.strictEqual(queue.size(), 0);
             });
 
             it('iterates oldest to newest', () => {
@@ -238,7 +268,6 @@ describe('Common API for all implementations', () => {
                     }
                     assert.throws(() => queue.enqueue(12345));
                 });
-
             }
         });
     }

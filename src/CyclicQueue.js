@@ -6,11 +6,15 @@ class CyclicQueue {
         if (typeof capacity !== 'number') {
             throw new Error(`capacity must a number`);
         }
-        capacity = Math.floor(capacity);
+        this._capacity = Math.floor(capacity);
         if (capacity <= 0) {
             throw new Error(`capacity must be positive (current value is ${capacity})`);
         }
-        this._arr = new Array(capacity);
+        this.clear();
+    }
+
+    clear() {
+        this._arr = new Array(this._capacity);
         this._size = 0
         this._newestIndex = 0
         this._oldestIndex = 0

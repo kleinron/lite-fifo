@@ -3,6 +3,10 @@ class DynamicArrayQueue {
         this._arr = [];
     }
 
+    clear() {
+        this._arr = [];
+    }
+
     enqueue(item) {
         this._arr.push(item);
     }

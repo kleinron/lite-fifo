@@ -3,6 +3,10 @@ const NEXT = 1;
 
 class LinkedQueue {
     constructor() {
+        this.clear();
+    }
+
+    clear() {
         this._newest = null;
         this._oldest = null;
         this._size = 0;

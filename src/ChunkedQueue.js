@@ -17,6 +17,10 @@ class ChunkedQueue {
         this._chunkSize = chunkSize;
     }
 
+    clear() {
+        this._queue.clear();
+    }
+
     enqueue(item) {
         if (this._queue.size() === 0) {
             this._queue.enqueue(new CyclicQueue(this._chunkSize));
