@@ -1,11 +1,21 @@
+class Node {
+    constructor(value, next) {
+        this.value = value;
+        this.next = next;
+    }
+}
+
 function main(className, itemCount) {
     let cls;
     switch (className.toLowerCase()) {
-        case 'object'.toLowerCase():
+        case 'array'.toLowerCase():
             cls = (x) => [x, null];
             break;
-        case 'array'.toLowerCase():
+        case 'object'.toLowerCase():
             cls = (x) => ({value: x, next: null});
+            break;
+        case 'class'.toLowerCase():
+            cls = (x) => new Node(x, null);
             break;
         default:
             throw new Error(`no matching class found for class ${className}`);
@@ -13,9 +23,9 @@ function main(className, itemCount) {
 
     const memoryUsage1 = process.memoryUsage();
     // noinspection JSMismatchedCollectionQueryUpdate
-    const lst = []
+    const lst = new Array(itemCount);
     for (let i = 0; i < itemCount; i++) {
-        lst.push(cls(88776655));
+        lst[i] = cls(88776655);
     }
     const memoryUsage2 = process.memoryUsage();
     const diff = Object.entries(memoryUsage2)

@@ -1,5 +1,6 @@
 const { LinkedQueue } = require('../src/LinkedQueue');
 const { ChunkedQueue } = require('../src/ChunkedQueue');
+const { CyclicQueue } = require('../src/CyclicQueue');
 const { DynamicArrayQueue } = require('../src/DynamicArrayQueue');
 
 function main(className, chunkSize, counts) {
@@ -10,6 +11,9 @@ function main(className, chunkSize, counts) {
             break;
         case 'ChunkedQueue'.toLowerCase():
             cls = () => new ChunkedQueue(chunkSize);
+            break;
+        case 'CyclicQueue'.toLowerCase():
+            cls = () => new CyclicQueue(chunkSize);
             break;
         case 'DynamicArrayQueue'.toLowerCase():
             cls = () => new DynamicArrayQueue();

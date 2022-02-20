@@ -1,6 +1,4 @@
 const {bindMethods} = require("./util");
-const VALUE = 0;
-const NEXT = 1;
 
 class LinkedQueue {
     constructor() {
@@ -14,20 +12,15 @@ class LinkedQueue {
         this._size = 0;
     }
 
-    _createNode(value, next) {
-        return [value, next];
-    }
-
     enqueue(item) {
         if (this._size === 0) {
-            this._newest = this._createNode(item, null);
-            this._oldest = this._newest
-            this._size = 1
-            return;
+            this._newest = {value: item, next: null};
+            this._oldest = this._newest;
+        } else {
+            const temp = {value: item, next: null};
+            this._newest.next = temp;
+            this._newest = temp;
         }
-        const temp = this._createNode(item, null);
-        this._newest[NEXT] = temp;
-        this._newest = temp;
         this._size++;
     }
 
@@ -40,9 +33,9 @@ class LinkedQueue {
             throw new Error('cannot dequeue from an empty queue');
         }
         const oldest = this._oldest;
-        const result = oldest[VALUE];
-        oldest[VALUE] = null;
-        this._oldest = oldest[NEXT];
+        const result = oldest.value;
+        oldest.value = null;
+        this._oldest = oldest.next;
         this._size--;
         return result;
     }
@@ -51,14 +44,14 @@ class LinkedQueue {
         if (this._size === 0) {
             throw new Error('cannot peek from an empty queue');
         }
-        return this._newest[VALUE];
+        return this._newest.value;
     }
 
     peekFirst() {
         if (this._size === 0) {
             throw new Error('cannot peek from an empty queue');
         }
-        return this._oldest[VALUE];
+        return this._oldest.value;
     }
 
     [Symbol.iterator]() {
@@ -68,8 +61,8 @@ class LinkedQueue {
                 if (itOldest === null) {
                     return {done: true};
                 } else {
-                    const result = {done: false, value: itOldest[VALUE]};
-                    itOldest = itOldest[NEXT];
+                    const result = {done: false, value: itOldest.value};
+                    itOldest = itOldest.next;
                     return result;
                 }
             }
@@ -77,11 +70,20 @@ class LinkedQueue {
     }
 
     copyTo(arr, startIndex) {
+        if (startIndex === undefined) {
+            startIndex = 0;
+        }
         let index = startIndex;
         for (let v of this) {
             arr[index] = v;
             index++;
         }
+    }
+
+    toArray() {
+        const arr = new Array(this.size());
+        this.copyTo(arr, 0);
+        return arr;
     }
 
     drainingIterator() {
@@ -104,9 +106,7 @@ class LinkedQueue {
 
     // noinspection JSUnusedGlobalSymbols
     toJSON() {
-        const arr = new Array(this.size());
-        this.copyTo(arr, 0);
-        return arr;
+        return this.toArray();
     }
 }
 

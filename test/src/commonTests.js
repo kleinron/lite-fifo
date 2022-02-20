@@ -268,6 +268,13 @@ describe('Common API for all implementations', () => {
                     assert.throws(() => queue.enqueue(12345));
                 });
             }
+
+            describe('toArray', () => {
+                it('when empty return an empty array', () => {
+                    const queue = queueFactory.create();
+                    assert.deepStrictEqual(queue.toArray(), []);
+                })
+            })
         });
     }
 });

@@ -110,6 +110,12 @@ class ChunkedQueue {
         }
     }
 
+    toArray() {
+        const arr = new Array(this.size());
+        this.copyTo(arr, 0);
+        return arr;
+    }
+
     toJSON() {
         const arr = new Array(this.size());
         this.copyTo(arr);

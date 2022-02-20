@@ -112,6 +112,9 @@ class CyclicQueue {
     }
 
     copyTo(arr, startIndex) {
+        if (startIndex === undefined) {
+            startIndex = 0;
+        }
         let index = startIndex;
         for (let v of this) {
             arr[index] = v;
