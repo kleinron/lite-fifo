@@ -2,6 +2,7 @@ const { LinkedQueue } = require('../src/LinkedQueue');
 const { ChunkedQueue } = require('../src/ChunkedQueue');
 const { CyclicQueue } = require('../src/CyclicQueue');
 const { DynamicArrayQueue } = require('../src/DynamicArrayQueue');
+const { DynamicCyclicQueue } = require('../src/DynamicCyclicQueue');
 
 function main(className, chunkSize, counts) {
     let cls;
@@ -17,6 +18,9 @@ function main(className, chunkSize, counts) {
             break;
         case 'DynamicArrayQueue'.toLowerCase():
             cls = () => new DynamicArrayQueue();
+            break;
+        case 'DynamicCyclicQueue'.toLowerCase():
+            cls = () => new DynamicCyclicQueue(chunkSize);
             break;
         default:
             throw new Error(`no matching class found for class ${className}`);
@@ -46,7 +50,7 @@ function main(className, chunkSize, counts) {
             return agg;
         }, {});
     diff['time'] = stop - start;
-    diff['ops/sec'] = counts.reduce((agg, v) => { return agg + v; }, 0) / diff['time'];
+    diff['opsPerSec'] = counts.reduce((agg, v) => { return agg + v; }, 0) / diff['time'];
     console.log(JSON.stringify(diff));
 }
 

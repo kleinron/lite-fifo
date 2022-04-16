@@ -2,6 +2,7 @@ const { LinkedQueue } = require('../../src/LinkedQueue');
 const { ChunkedQueue } = require('../../src/ChunkedQueue');
 const { CyclicQueue } = require('../../src/CyclicQueue');
 const { DynamicArrayQueue } = require('../../src/DynamicArrayQueue');
+const { DynamicCyclicQueue } = require('../../src/DynamicCyclicQueue');
 const assert = require('assert');
 
 function randomNumber(limit) {
@@ -12,6 +13,10 @@ describe('Common API for all implementations', () => {
     const randomChunkSize = 1 + randomNumber();
     const randomCapacity = 1 + randomNumber(10000);
     const queueFactories = [
+        { name: 'DynamicCyclicQueue()', create: () => new DynamicCyclicQueue() },
+        { name: 'DynamicCyclicQueue(6)', create: () => new DynamicCyclicQueue(6) },
+        { name: 'DynamicCyclicQueue(300)', create: () => new DynamicCyclicQueue(300) },
+        { name: `DynamicCyclicQueue(${randomCapacity})`, create: () => new DynamicCyclicQueue(randomCapacity) },
         { name: 'LinkedQueue', create: () => new LinkedQueue() },
         { name: 'DynamicArrayQueue', create: () => new DynamicArrayQueue() },
         { name: 'ChunkedQueue()', create: () => new ChunkedQueue() },
