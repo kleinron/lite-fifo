@@ -19,8 +19,8 @@ class CyclicQueue {
     clear() {
         this._arr = new Array(this._capacity);
         this._size = 0
-        this._newestIndex = 0
-        this._oldestIndex = 0
+        this._lastIndex = 0
+        this._firstIndex = 0
     }
 
     capacity() {
@@ -35,8 +35,11 @@ class CyclicQueue {
         if (this._size === this._arr.length) {
             throw new Error('queue overflow');
         }
-        this._arr[this._newestIndex] = item;
-        this._newestIndex = this._increaseMod(this._newestIndex);
+        if (this._size === 0) {
+            this._arr[this._firstIndex = this._lastIndex = 0] = item;
+        } else {
+            this._arr[this._lastIndex = this._increaseMod(this._lastIndex)] = item;
+        }
         this._size++;
     }
 
@@ -52,9 +55,9 @@ class CyclicQueue {
         if (this._size === 0) {
             throw new Error('queue underflow');
         }
-        const result = this._arr[this._oldestIndex];
-        this._arr[this._oldestIndex] = null;
-        this._oldestIndex = this._increaseMod(this._oldestIndex);
+        const result = this._arr[this._firstIndex];
+        this._arr[this._firstIndex] = null;
+        this._firstIndex = this._increaseMod(this._firstIndex);
         this._size--;
         return result;
     }
@@ -63,18 +66,18 @@ class CyclicQueue {
         if (this._size === 0) {
             throw new Error('cannot peek from an empty queue');
         }
-        return this._arr[this._decreaseMod(this._newestIndex)];
+        return this._arr[this._lastIndex];
     }
 
     peekFirst() {
         if (this._size === 0) {
             throw new Error('cannot peek from an empty queue');
         }
-        return this._arr[this._oldestIndex];
+        return this._arr[this._firstIndex];
     }
 
     [Symbol.iterator]() {
-        let oldestIndex = this._oldestIndex;
+        let firstIndex = this._firstIndex;
         const incMod = this._increaseMod.bind(this);
         const arr = this._arr;
         const size = this.size();
@@ -84,8 +87,8 @@ class CyclicQueue {
                 if (i === size) {
                     return {done: true};
                 } else {
-                    const result = {done: false, value: arr[oldestIndex]};
-                    oldestIndex = incMod(oldestIndex);
+                    const result = {done: false, value: arr[firstIndex]};
+                    firstIndex = incMod(firstIndex);
                     i++;
                     return result;
                 }
