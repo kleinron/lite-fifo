@@ -4,9 +4,17 @@
   "dependencies": {},
   "devDependencies": {
     "mocha": "^9.2.2",
-    "seedrandom": "^3.0.5"
+    "seedrandom": "^3.0.5",
+    "shelljs": "^0.8.5"
   },
   "scripts": {
-    "test-node": "mocha test/ --recursive --check-leaks --require test/src/setup.js"
+    "test": "mocha test/ --recursive --check-leaks --require test/src/setup.js",
+    "benchmark": "node ./benchmark/report-generator.js",
+    "benchmark-dynamic-array": "node ./benchmark/report-generator.js ./benchmark/report-config-dynamic-array.json"
+  },
+  "author": {
+    "name": "Ron Klein",
+    "email": "npm@ronklein.co.il",
+    "url": "https://ronklein.co.il"
   }
 }

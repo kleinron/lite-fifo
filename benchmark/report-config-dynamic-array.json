@@ -1,0 +1,7 @@
+{
+  "operations": [300000, 50000, 10000, 50000, 10000, 50000, 10000, 50000, 10000, 50000, 10000, 50000, 10000, 50000],
+  "classes": ["DynamicArrayQueue"],
+  "iterationsPerClass": 6,
+  "shuffle": false,
+  "removeMinMax": true
+}
