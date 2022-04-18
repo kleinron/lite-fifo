@@ -22,8 +22,8 @@ class DynamicArrayQueue {
     }
 }
 ```
-The time complexity of the `dequeue` operation is O(n). At small scale - we wouldn't mind.  
-On a high scale, say 300000 items, this implementation would have only 5 (five) ops per second. Complexity matters..  
+The time complexity of the `dequeue` operation is O(n). At small scale - we wouldn't notice.  
+On a high scale, say 300000 items, this implementation would have only 5 (five!) ops per second. Complexity matters..  
 At the bottom line, this implementation is a mistake.
 
 ### Linked List
