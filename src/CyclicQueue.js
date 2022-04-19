@@ -47,10 +47,6 @@ class CyclicQueue {
         return val + 1 === this._arr.length ? 0 : val + 1;
     }
 
-    _decreaseMod(val) {
-        return val === 0 ? this._arr.length - 1 : val - 1;
-    }
-
     dequeue() {
         if (this._size === 0) {
             throw new Error('queue underflow');
