@@ -34,8 +34,8 @@ class LinkedQueue {
         }
         const oldest = this._oldest;
         const result = oldest.value;
-        oldest.value = null;
         this._oldest = oldest.next;
+        oldest.value = oldest.next = null;
         this._size--;
         return result;
     }
