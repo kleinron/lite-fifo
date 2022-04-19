@@ -56,13 +56,13 @@ Apply this scenario T times (set T=20) for every relevant class (see table below
 Remove best and worst results (in terms of ops/sec), and take the average (mean) from the rest of the results.
 
 
-| Class Name         |   Ops/Sec |     RAM used | 
-|:-------------------|----------:|-------------:|
-| DynamicArrayQueue  |     **5** |      8267728 |
-| ChunkedQueue       |     16378 |     84135800 |
-| ChunkedQueue(1024) |     28307 | **28628260** |
-| DynamicCyclicQueue | **44864** |    102423848 |
-| LinkedQueue        |     25815 |    143424466 |
+| Class Name         |   Ops/Sec | RAM used (MB) | 
+|:-------------------|----------:|--------------:|
+| DynamicArrayQueue  |     **5** |             8 |
+| ChunkedQueue       |     16378 |            84 |
+| ChunkedQueue(1024) |     28307 |        **28** |
+| DynamicCyclicQueue | **44864** |           102 |
+| LinkedQueue        |     25815 |           143 |
 
 ## Analysis
 1. The naive implementation, `DynamicArrayQueue`, is so slow that it can't be considered as an option
