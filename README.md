@@ -2,7 +2,7 @@
 
 ## Lightweight and efficient Queue implementations
 This package aims to provide zero-dependencies implementations of a queue, focusing on:
-* memory footprint (scale)
+* memory footprint (RAM)
 * efficiency (ops/sec)  
 
 The production code is dependency free. The only dependencies are for testing.
