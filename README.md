@@ -46,7 +46,7 @@ This process is *O(1) amortized*, and therefore this is a generic queue, and can
 # The Benchmark
 ## Methodology
 The scenario being checked is the following:  
-set P = 1000  
+set P = 100000  
 enqueue 30P items  
 dequeue 5P  
 do 6 times:  
@@ -55,6 +55,8 @@ do 6 times:
 
 Apply this scenario T times (set T=20) for every relevant class (see table below), measure RAM used and ops/sec.  
 Remove best and worst results (in terms of ops/sec), and take the average (mean) from the rest of the results.
+
+Note: we took a very large value for P, otherwise complexity related issues won't come up.
 
 
 | Class Name         |   Ops/Sec | RAM used (MB) | 
