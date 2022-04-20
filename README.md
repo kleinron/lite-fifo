@@ -4,6 +4,7 @@
 This package aims to provide zero-dependencies implementations of a queue, focusing on:
 * memory footprint (scale)
 * efficiency (ops/sec)  
+
 The production code is dependency free. The only dependencies are for testing.
 
 ## Common implementations and mistakes
