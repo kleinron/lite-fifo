@@ -29,7 +29,7 @@ At the bottom line, this implementation is a mistake.
 
 ### Linked List
 A linked list implementation for a queue behaves very well in terms of time complexity: O(1).  
-On the memory side, the provided implementation, `LinkedQueue`, introduces an optimization: instead of relying on a doubly-linked-list, it relies on a singly-linked-list.
+On the memory side, the provided implementation, `LinkedQueue`, introduces an optimization: instead of relying on a doubly-linked-list, it relies on a singly-linked-list.  
 However, even with this optimization, the memory footprint of `LinkedQueue` is the highest (see the benchmark table below).  
 
 ## Better implementations
