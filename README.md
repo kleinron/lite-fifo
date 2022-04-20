@@ -3,14 +3,14 @@
 ## Lightweight and efficient Queue implementations
 This package aims to provide zero-dependencies implementations of a queue, focusing on:
 * memory footprint (scale)
-* efficiency (ops/sec)
+* efficiency (ops/sec)  
 The production code is dependency free. The only dependencies are for testing.
 
 ## Common implementations and mistakes
 ### Array + push + shift
 A very common implementation of a queue looks like this:
 ```javascript
-class DynamicArrayQueue {
+class DynamicArrayQueue { /* DON'T USE THIS CODE, IT DOESN'T SCALE */
     constructor() {
         this._arr = [];
     }
