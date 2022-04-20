@@ -58,7 +58,7 @@ Remove best and worst results (in terms of ops/sec), and take the average (mean)
 
 Note: we took a very large value for P, otherwise complexity related issues won't come up.
 
-
+## Results
 | Class Name         |   Ops/Sec | RAM used (MB) | 
 |:-------------------|----------:|--------------:|
 | DynamicArrayQueue  |     **5** |             8 |
