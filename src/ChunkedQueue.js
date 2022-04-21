@@ -5,7 +5,7 @@ const { bindMethods } = require('./util');
 class ChunkedQueue {
     constructor(chunkSize) {
         if (chunkSize === undefined) {
-            chunkSize = 64;
+            chunkSize = 1024;
         }
         if (typeof chunkSize !== 'number') {
             throw new Error(`chunkSize must a number`);
@@ -27,18 +27,18 @@ class ChunkedQueue {
         if (this._queue.size() === 0) {
             this._queue.enqueue(new CyclicQueue(this._chunkSize));
         }
-        let newestChunk = this._queue.peekLast();
-        if (newestChunk.size() === this._chunkSize) {
-            newestChunk = new CyclicQueue(this._chunkSize);
-            this._queue.enqueue(newestChunk);
+        let lastChunk = this._queue.peekLast();
+        if (lastChunk.size() === this._chunkSize) {
+            lastChunk = new CyclicQueue(this._chunkSize);
+            this._queue.enqueue(lastChunk);
         }
-        newestChunk.enqueue(item);
+        lastChunk.enqueue(item);
     }
 
     dequeue() {
-        let oldestChunk = this._queue.peekFirst();
-        const result = oldestChunk.dequeue();
-        if (oldestChunk.size() === 0) {
+        let firstChunk = this._queue.peekFirst();
+        const result = firstChunk.dequeue();
+        if (firstChunk.size() === 0) {
             this._queue.dequeue();
         }
         return result;
