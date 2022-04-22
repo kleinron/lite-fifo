@@ -62,8 +62,7 @@ Note: we took a very large value for P, otherwise complexity related issues won'
 | Class Name         |   Ops/Sec | RAM used (MB) | 
 |:-------------------|----------:|--------------:|
 | DynamicArrayQueue  |     **5** |             8 |
-| ChunkedQueue       |     16378 |            84 |
-| ChunkedQueue(1024) |     28307 |        **28** |
+| ChunkedQueue       |     28307 |        **28** |
 | DynamicCyclicQueue | **44864** |           102 |
 | LinkedQueue        |     25815 |           143 |
 
