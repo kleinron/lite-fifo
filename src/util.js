@@ -1,15 +1,15 @@
-function bindMethods() {
-    Object.getOwnPropertyNames(Object.getPrototypeOf(this))
-        .map(key => {
-            if (this[key] instanceof Function && key !== 'constructor')
-                this[key] = this[key].bind(this)
-        })
+function bindMethods () {
+  Object.getOwnPropertyNames(Object.getPrototypeOf(this))
+    .map(key => {
+      if (this[key] instanceof Function && key !== 'constructor') { this[key] = this[key].bind(this); }
+      return undefined;
+    });
 }
 
-function swap(arr, i, j) {
-    const temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
+function swap (arr, i, j) {
+  const temp = arr[i];
+  arr[i] = arr[j];
+  arr[j] = temp;
 }
 
-module.exports = {bindMethods, swap};
+module.exports = { bindMethods, swap };
