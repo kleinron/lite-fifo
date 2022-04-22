@@ -15,7 +15,7 @@ npm install lite-fifo
 
 ## Usage
 ```javascript
-const { DynamicArrayQueue } = require('smart-replacer');
+const { DynamicArrayQueue } = require('lite-fifo');
 
 const queue = new DynamicArrayQueue();
 queue.enqueue(123);
