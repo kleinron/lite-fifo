@@ -30,7 +30,6 @@ class DynamicCyclicQueue {
   }
 
   _expand () {
-    // todo: better expand policy
     // increase by 1.5
     const newSize = Math.min(MAX_ARRAY_SIZE, this._size + (this._size >> 1));
     if (newSize === this._size) {
@@ -95,7 +94,6 @@ class DynamicCyclicQueue {
   }
 
   _reduceIfNeeded () {
-    // todo: better reduce policy
     // check if current size is 1/3 or less of allocated array
     if (((this._size << 1) + this._size) <= this._arr.length) {
       // remove 1/3 of the allocation
