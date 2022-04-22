@@ -19,6 +19,7 @@ class ChunkedQueue {
     bindMethods.call(this);
   }
 
+  // noinspection JSUnusedGlobalSymbols
   clear () {
     this._queue.clear();
   }
@@ -117,6 +118,7 @@ class ChunkedQueue {
     return arr;
   }
 
+  // noinspection JSUnusedGlobalSymbols
   toJSON () {
     const arr = new Array(this.size());
     this.copyTo(arr);
