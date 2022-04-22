@@ -7,6 +7,29 @@ This package aims to provide zero-dependencies implementations of a queue, focus
 
 The production code is dependency free. The only dependencies are for testing.
 
+
+## Installation
+```bash
+npm install lite-fifo
+```
+
+## Usage
+```javascript
+const { DynamicArrayQueue } = require('smart-replacer');
+
+const queue = new DynamicArrayQueue();
+queue.enqueue(123);
+queue.enqueue(45);
+queue.enqueue(67);
+
+console.log(queue.toJSON());
+// => [123, 45, 67]
+
+const temp = queue.dequeue(); // holds 123
+console.log(queue.toJSON());
+// => [45, 67]
+```
+
 ## Common implementations and mistakes
 ### Array + push + shift
 A very common implementation of a queue looks like this:

@@ -1,7 +1,9 @@
 {
   "name": "lite-fifo",
   "version": "0.1.0",
-  "dependencies": {},
+  "main": "src/index.js",
+  "homepage": "https://github.com/kleinron/lite-fifo.git#readme",
+  "description": "Lightweight, optimized, and efficient implementations for FIFO (queue) data structure",
   "devDependencies": {
     "mocha": "^9.2.2",
     "seedrandom": "^3.0.5",
@@ -14,13 +16,25 @@
     "test": "mocha test/ --recursive --check-leaks --require test/src/setup.js",
     "benchmark": "node ./benchmark/report-generator.js",
     "benchmark-dynamic-array": "node ./benchmark/report-generator.js ./benchmark/report-config-dynamic-array.json"
-
   },
   "author": {
     "name": "Ron Klein",
     "email": "npm@ronklein.co.il",
     "url": "https://ronklein.co.il"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kleinron/lite-fifo.git"
+  },
+  "keywords": [
+    "queue",
+    "fifo",
+    "lite",
+    "lightweight",
+    "array",
+    "data-structure",
+    "data structure"
+  ],
   "semistandard": {
     "env": [
       "mocha"
