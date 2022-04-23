@@ -95,5 +95,5 @@ Note: we took a very large value for P, otherwise complexity related issues won'
 3. The fine-tuned implementation of `ChunkedQueue`, with chunk size of 1024, has the lowest RAM usage, with the second-fastest measure of ops/sec
 4. The common `LinkedQueue` implementation is not the fastest one, even with *O(1)* time complexity, and it's the most wasteful in terms of RAM usage
 
-## Conclusion
-Sometimes it's ok to roll your own solution, as long as it's backed with data and measurements.
+## License
+MIT &copy; Ron Klein
