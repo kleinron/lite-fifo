@@ -1,3 +1,4 @@
+[![CI](https://github.com/kleinron/lite-fifo/actions/workflows/main.yaml/badge.svg)](https://github.com/kleinron/lite-fifo/actions/workflows/main.yaml) [![GitHub license](https://img.shields.io/github/license/kleinron/lite-fifo)](https://github.com/kleinron/lite-fifo/blob/main/LICENSE)
 # lite-fifo
 
 ## Lightweight and efficient Queue implementations
@@ -92,8 +93,12 @@ Note: we took a very large value for P, otherwise complexity related issues won'
 ## Analysis
 1. The naive implementation, `DynamicArrayQueue`, is so slow that it can't be considered as an option
 2. The fastest implementation is `DynamicCyclicQueue`, and has an average RAM usage
-3. The fine-tuned implementation of `ChunkedQueue`, with chunk size of 1024, has the lowest RAM usage, with the second-fastest measure of ops/sec
+3. The default implementation of `ChunkedQueue` has the lowest RAM usage, with the second-fastest measure of ops/sec
 4. The common `LinkedQueue` implementation is not the fastest one, even with *O(1)* time complexity, and it's the most wasteful in terms of RAM usage
+
+## Suggestions
+* Use the provided `DynamicCyclicQueue` for a generic solution
+* For some cases, e.g. telemetry shipping, `ChunkedQueue` is better - very low memory footprint
 
 ## License
 MIT &copy; Ron Klein
