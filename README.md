@@ -31,6 +31,88 @@ console.log(queue.toJSON());
 // => [45, 67]
 ```
 
+# API
+## Classes
+* LinkedQueue
+* CyclicQueue (bounded)
+* DynamicCyclicQueue (unbounded)
+* ChunkedQueue
+* DynamicArrayQueue
+
+All of these classes support the following methods
+## Methods
+### `enqueue (item)`  
+Add an item to the queue.  
+Bounded implementations might throw an exception if the capacity is exceeded.
+
+### `dequeue ()`
+Return the first inserted (or the "oldest") item in the queue, and removes it from the queue.  
+Zero sized queue would throw an exception.
+
+### `clear ()`
+Clear the queue.
+
+### `size ()`
+Return the current size of the queue.
+
+### `peekFirst ()`
+Return the first inserted (or the "oldest") item in the queue, without removing it from the queue.  
+Zero sized queue would throw an exception.
+
+### `peekLast ()`
+Return the last inserted (or the "newest") item in the queue, without removing it from the queue.  
+Zero sized queue would throw an exception.
+
+### `[Symbol.iterator] ()`
+Iterate over the items in the queue without changing the queue.  
+Iteration order is the insertion order: first inserted item would be returned first.  
+In essence this supports JS iterations of the pattern `for (let x of queue) { ... }`.  
+Example:  
+```javascript
+const queue = new DynamicArrayQueue();
+queue.enqueue(123);
+queue.enqueue(45);
+for (let item of queue) {
+  console.log(item);
+}
+// ==> output would be:
+// 123
+// 45
+// and the queue would remain unchanged
+```
+
+### `drainingIterator ()`
+Iterate over the items in the queue.  
+Every iterated item is removed from the queue.  
+Iteration order is the insertion order: first inserted item would be returned first.  
+Example:
+```javascript
+const queue = new DynamicArrayQueue();
+queue.enqueue(123);
+queue.enqueue(45);
+for (let item of queue.drainingIterator()) {
+  console.log(item);
+}
+console.log(`size = ${queue.size()}`);
+// ==> output would be:
+// 123
+// 45
+// size = 0
+```
+
+### `copyTo (arr, startIndex)`
+`startIndex` is optional, and defaults to 0 if not given.  
+Copy the items of the queue to the given array `arr`, starting from index `startIndex`.  
+First item in the array is first item inserted to the queue, and so forth.  
+No return value.
+
+### `toArray ()`
+Create an array with the same size as the queue, populate it with the items in the queue, keeping the iteration order, and return it.
+
+### `toJSON ()`
+Return a JSON representation (as a string) of the queue.  
+The queue is represented as an array: first item in the array is the first one inserted to the queue and so forth.
+
 ## Common implementations and mistakes
 ### Array + push + shift
 A very common implementation of a queue looks like this:

@@ -118,11 +118,8 @@ class ChunkedQueue {
     return arr;
   }
 
-  // noinspection JSUnusedGlobalSymbols
   toJSON () {
-    const arr = new Array(this.size());
-    this.copyTo(arr);
-    return arr;
+    return JSON.stringify(this.toArray());
   }
 }
 

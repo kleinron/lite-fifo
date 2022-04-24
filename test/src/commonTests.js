@@ -206,7 +206,7 @@ describe('Common API for all implementations', () => {
           numbers[i] = randomNumber();
         }
         numbers.forEach(queue.enqueue);
-        const queueAsJson = JSON.stringify(queue);
+        const queueAsJson = queue.toJSON();
         assert.strictEqual(queueAsJson, JSON.stringify(numbers));
       });
 

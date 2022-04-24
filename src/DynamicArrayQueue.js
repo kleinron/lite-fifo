@@ -85,9 +85,8 @@ class DynamicArrayQueue {
     return arr;
   }
 
-  // noinspection JSUnusedGlobalSymbols
   toJSON () {
-    return this.toArray();
+    return JSON.stringify(this.toArray());
   }
 }
 

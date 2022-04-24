@@ -104,9 +104,8 @@ class LinkedQueue {
     };
   }
 
-  // noinspection JSUnusedGlobalSymbols
   toJSON () {
-    return this.toArray();
+    return JSON.stringify(this.toArray());
   }
 }
 
