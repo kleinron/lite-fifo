@@ -1,6 +1,7 @@
 {
   "name": "lite-fifo",
-  "version": "0.2.0",
+  "version": "0.2.1",
+  "license": "MIT",
   "main": "src/index.js",
   "homepage": "https://github.com/kleinron/lite-fifo.git#readme",
   "description": "Lightweight, optimized, and efficient implementations for FIFO (queue) data structure",

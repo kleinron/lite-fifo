@@ -1,4 +1,7 @@
-[![CI](https://github.com/kleinron/lite-fifo/actions/workflows/main.yaml/badge.svg)](https://github.com/kleinron/lite-fifo/actions/workflows/main.yaml) [![GitHub license](https://img.shields.io/github/license/kleinron/lite-fifo)](https://github.com/kleinron/lite-fifo/blob/main/LICENSE)
+[![NPM version](https://img.shields.io/npm/v/lite-fifo.svg?style=flat)](https://npmjs.org/package/lite-fifo)
+[![CI](https://github.com/kleinron/lite-fifo/actions/workflows/main.yaml/badge.svg)](https://github.com/kleinron/lite-fifo/actions/workflows/main.yaml)
+[![GitHub license](https://img.shields.io/github/license/kleinron/lite-fifo)](https://github.com/kleinron/lite-fifo/blob/main/LICENSE)
+
 # lite-fifo
 
 ## Lightweight and efficient Queue implementations
