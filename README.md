@@ -5,9 +5,9 @@
 # lite-fifo
 
 ## Lightweight and efficient Queue implementations
-This package aims to provide zero-dependencies implementations of a queue, focusing on:
+This package aims to provide zero-dependency implementations of a queue, focusing on:
 * memory footprint (RAM)
-* efficiency (ops/sec)  
+* throughput (ops/sec)  
 
 The production code is dependency free. The only dependencies are for testing.
 
@@ -27,11 +27,11 @@ queue.enqueue(45);
 queue.enqueue(67);
 
 console.log(queue.toJSON());
-// => [123, 45, 67]
+// => [ 123, 45, 67 ]
 
 const temp = queue.dequeue(); // holds 123
 console.log(queue.toJSON());
-// => [45, 67]
+// => [ 45, 67 ]
 ```
 
 # API
