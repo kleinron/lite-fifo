@@ -3,20 +3,23 @@
   "version": "0.2.2",
   "license": "MIT",
   "main": "src/index.js",
+  "types": "types/index.d.ts",
   "homepage": "https://github.com/kleinron/lite-fifo.git#readme",
   "description": "Lightweight, optimized, and efficient implementations for FIFO (queue) data structure",
   "devDependencies": {
     "mocha": "^9.2.2",
     "seedrandom": "^3.0.5",
     "shelljs": "^0.8.5",
-    "semistandard": "^16.0.1"
+    "tsc": "^2.0.4",
+    "typescript": "^4.6.4"
   },
   "scripts": {
     "lint": "semistandard",
     "lint-with-fix": "semistandard --fix",
     "test": "mocha test/ --recursive --check-leaks --require test/src/setup.js",
     "benchmark": "node ./benchmark/report-generator.js",
-    "benchmark-dynamic-array": "node ./benchmark/report-generator.js ./benchmark/report-config-dynamic-array.json"
+    "benchmark-dynamic-array": "node ./benchmark/report-generator.js ./benchmark/report-config-dynamic-array.json",
+    "types": "tsc"
   },
   "author": {
     "name": "Ron Klein",
