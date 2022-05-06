@@ -20,7 +20,7 @@
     "test": "mocha test/ --recursive --check-leaks --require test/src/setup.js",
     "benchmark": "node ./benchmark/report-generator.js",
     "benchmark-dynamic-array": "node ./benchmark/report-generator.js ./benchmark/report-config-dynamic-array.json",
-    "types": "tsc"
+    "types": "node ./node_modules/typescript/bin/tsc"
   },
   "author": {
     "name": "Ron Klein",
