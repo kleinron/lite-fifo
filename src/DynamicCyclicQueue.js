@@ -6,7 +6,6 @@ const MIN_INITIAL_CAPACITY = 4;
  * @type DynamicCyclicQueue
  */
 class DynamicCyclicQueue {
-
   /**
    * @param {number} [initialCapacity]
    * @returns {DynamicCyclicQueue}

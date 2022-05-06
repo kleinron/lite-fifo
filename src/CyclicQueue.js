@@ -4,7 +4,6 @@ const { bindMethods } = require('./util');
  * @type CyclicQueue
  */
 class CyclicQueue {
-
   /**
    * @param {number} [capacity]
    * @returns {CyclicQueue}

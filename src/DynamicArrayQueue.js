@@ -4,7 +4,6 @@ const { bindMethods } = require('./util');
  * @type DynamicArrayQueue
  */
 class DynamicArrayQueue {
-
   /**
    * @returns {DynamicArrayQueue}
    */
