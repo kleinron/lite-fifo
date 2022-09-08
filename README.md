@@ -19,9 +19,9 @@ npm install lite-fifo
 
 ## Usage
 ```javascript
-const { DynamicArrayQueue } = require('lite-fifo');
+const { ChunkedQueue } = require('lite-fifo');
 
-const queue = new DynamicArrayQueue();
+const queue = new ChunkedQueue();
 queue.enqueue(123);
 queue.enqueue(45);
 queue.enqueue(67);
@@ -72,7 +72,7 @@ Iteration order is the insertion order: first inserted item would be returned fi
 In essence this supports JS iterations of the pattern `for (let x of queue) { ... }`.  
 Example:  
 ```javascript
-const queue = new DynamicArrayQueue();
+const queue = new ChunkedQueue();
 queue.enqueue(123);
 queue.enqueue(45);
 for (let item of queue) {
@@ -90,7 +90,7 @@ Every iterated item is removed from the queue.
 Iteration order is the insertion order: first inserted item would be returned first.  
 Example:
 ```javascript
-const queue = new DynamicArrayQueue();
+const queue = new ChunkedQueue();
 queue.enqueue(123);
 queue.enqueue(45);
 for (let item of queue.drainingIterator()) {
