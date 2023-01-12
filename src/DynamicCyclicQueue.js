@@ -1,4 +1,4 @@
-const { bindMethods, swap } = require('./util');
+const { bindMethods } = require('./util');
 const MAX_ARRAY_SIZE = 4294967295;
 const MIN_INITIAL_CAPACITY = 4;
 
@@ -54,6 +54,7 @@ class DynamicCyclicQueue {
       throw new Error('reached max capacity');
     }
     this._normalizeToZeroIndex();
+    this._lastIndex = this._size - 1;
     for (let i = 0; i < (newSize - this._size); ++i) {
       this._arr.push(null);
     }
@@ -84,6 +85,28 @@ class DynamicCyclicQueue {
     }
   }
 
+  // in-place
+  _cyclicLeftShift (arr, steps) {
+    if (steps < 0) throw new Error('steps must be a non negative number');
+
+    let processed = 0;
+    let cycleIdx = 0;
+    while (processed !== arr.length) {
+      let idx = cycleIdx;
+      let swapIdx = this._fixOverflow(idx + steps);
+      const tmp = arr[idx];
+      while (swapIdx !== cycleIdx) {
+        arr[idx] = arr[swapIdx];
+        processed += 1;
+        idx = swapIdx;
+        swapIdx = this._fixOverflow(idx + steps);
+      }
+      arr[idx] = tmp;
+      processed += 1;
+      cycleIdx += 1;
+    }
+  }
+
   /**
    * @returns {void}
    */
@@ -91,9 +114,10 @@ class DynamicCyclicQueue {
     if (this._firstIndex === 0) {
       return;
     }
-    for (let i = 0; i < this._size; ++i) {
-      swap(this._arr, i, this._fixOverflow(this._firstIndex + i));
-    }
+
+    this._cyclicLeftShift(this._arr, this._firstIndex);
+
+    // this._arr = temp;
     this._firstIndex = 0;
     if (this._size === 0) {
       this._lastIndex = 0;
@@ -107,6 +131,10 @@ class DynamicCyclicQueue {
    * @returns {number}
    */
   _fixOverflow (n) {
+    if (this._arr.length === 0) {
+      if (n === 0) return 0;
+      throw new Error('cannot fix overflow of a zero length array');
+    }
     return n < this._arr.length ? n : n - this._arr.length;
   }
 
@@ -139,13 +167,20 @@ class DynamicCyclicQueue {
    * @returns {void}
    */
   _reduceIfNeeded () {
+    if (this._size <= 1) {
+      return;
+    }
+
     // check if current size is 1/3 or less of allocated array
     if (((this._size << 1) + this._size) <= this._arr.length) {
       // remove 1/3 of the allocation
       this._normalizeToZeroIndex();
-      for (let i = 0; i < this._size; ++i) {
+      const reduceCount = this._arr.length - ((this._size << 1) + this._size);
+      for (let i = 0; i < reduceCount; i++) {
         this._arr.pop();
       }
+      this._firstIndex = 0;
+      this._lastIndex = this._size - 1;
     }
   }
 
