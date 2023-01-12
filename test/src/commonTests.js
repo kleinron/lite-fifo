@@ -14,6 +14,7 @@ describe('Common API for all implementations', () => {
   const randomCapacity = 1 + randomNumber(10000);
   const queueFactories = [
     { name: 'DynamicCyclicQueue()', create: () => new DynamicCyclicQueue() },
+    { name: 'DynamicCyclicQueue(5)', create: () => new DynamicCyclicQueue(5) },
     { name: 'DynamicCyclicQueue(6)', create: () => new DynamicCyclicQueue(6) },
     { name: 'DynamicCyclicQueue(300)', create: () => new DynamicCyclicQueue(300) },
     { name: `DynamicCyclicQueue(${randomCapacity})`, create: () => new DynamicCyclicQueue(randomCapacity) },
@@ -30,6 +31,12 @@ describe('Common API for all implementations', () => {
     { name: 'CyclicQueue(300)', create: () => new CyclicQueue(300) },
     { name: `CyclicQueue(${randomCapacity})`, create: () => new CyclicQueue(randomCapacity) }
   ];
+
+  const stressTestEnabled = (process.env.STRESS_TESTS_ENABLED || 'false').toLowerCase() === 'true';
+  if (!stressTestEnabled) {
+    console.log('stress tests disabled');
+  }
+  const stressTestCount = parseInt(process.env.STRESS_TESTS_COUNT || '1000');
 
   for (const queueFactory of queueFactories) {
     const name = queueFactory.name;
@@ -182,6 +189,34 @@ describe('Common API for all implementations', () => {
           assert.strictEqual(queue.size(), n - k);
         });
       });
+
+      if (stressTestEnabled && name !== 'DynamicArrayQueue') {
+        describe('random enqueue and dequeue actions', () => {
+          for (let i = 0; i < stressTestCount; i++) {
+            it(`${name} iteration #${i}`, () => {
+              const totalOperations = randomNumber(1000);
+              const queue = queueFactory.create();
+              const controlQueue = new DynamicArrayQueue();
+
+              for (let i = 0; i < totalOperations; i++) {
+                if (Math.random() < 0.5) {
+                  if (queue.capacity && queue.capacity() === queue.size()) {
+                    continue;
+                  }
+                  queue.enqueue(i);
+                  controlQueue.enqueue(i);
+                } else {
+                  if (controlQueue.size() !== 0) {
+                    queue.dequeue();
+                    controlQueue.dequeue();
+                  }
+                }
+              }
+              assert.deepEqual(queue.toArray(), controlQueue.toArray());
+            });
+          }
+        });
+      }
 
       describe('clear', () => {
         it('clears a new instance', () => {

@@ -17,6 +17,7 @@
     "lint": "semistandard",
     "lint-with-fix": "semistandard --fix",
     "test": "mocha test/ --recursive --check-leaks --require test/src/setup.js",
+    "test-stress": "export STRESS_TESTS_ENABLED=true && export STRESS_TESTS_COUNT=10000 && mocha test/ --recursive --check-leaks --require test/src/setup.js",
     "benchmark": "node ./benchmark/report-generator.js",
     "benchmark-dynamic-array": "node ./benchmark/report-generator.js ./benchmark/report-config-dynamic-array.json",
     "types": "node ./node_modules/typescript/bin/tsc"
