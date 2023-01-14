@@ -167,15 +167,15 @@ class DynamicCyclicQueue {
    * @returns {void}
    */
   _reduceIfNeeded () {
-    if (this._size <= 1) {
+    if (this._size <= MIN_INITIAL_CAPACITY) {
       return;
     }
 
     // check if current size is 1/3 or less of allocated array
     if (((this._size << 1) + this._size) <= this._arr.length) {
-      // remove 1/3 of the allocation
       this._normalizeToZeroIndex();
-      const reduceCount = this._arr.length - ((this._size << 1) + this._size);
+      // re-allocate so that new capacity is (size * 2)
+      const reduceCount = this._arr.length - (this._size << 1);
       for (let i = 0; i < reduceCount; i++) {
         this._arr.pop();
       }

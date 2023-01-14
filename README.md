@@ -145,7 +145,6 @@ However, even with this optimization, the memory footprint of `LinkedQueue` is t
 ### Linked List of Ring Buffers
 A ring buffer, or a cyclic queue, is a *bounded* data structure that relies on an array. It's very fast, but bounded.  
 We can, however, introduce a new data structure named `ChunkedQueue`, in which we create a `LinkedQueue` with each item in it to be a cyclic queue.  
-**It's not a generic queue**, as it has a weakness, which is out of the scope of this page, so use with caution.
 
 ### DynamicCyclicQueue
 Same as a cyclic queue, but can exceed the initial length of the underlying array.  
@@ -168,22 +167,21 @@ Remove best and worst results (in terms of ops/sec), and take the average (mean)
 Note: we took a very large value for P, otherwise complexity related issues won't come up.
 
 ## Results
-| Class Name         |   Ops/Sec | RAM used (MB) | 
-|:-------------------|----------:|--------------:|
-| DynamicArrayQueue  |     **5** |             8 |
-| ChunkedQueue       |     28307 |        **28** |
-| DynamicCyclicQueue | **44864** |           102 |
-| LinkedQueue        |     25815 |           143 |
+| Class Name         | Ops/Sec | RAM used (MB) | 
+|:-------------------|--------:|--------------:|
+| DynamicArrayQueue  |   **5** |             8 |
+| ChunkedQueue       |   31800 |        **28** |
+| DynamicCyclicQueue |   27100 |           102 |
+| LinkedQueue        |   29800 |           143 |
 
 ## Analysis
 1. The naive implementation, `DynamicArrayQueue`, is so slow that it can't be considered as an option
-2. The fastest implementation is `DynamicCyclicQueue`, and has an average RAM usage
-3. The default implementation of `ChunkedQueue` has the lowest RAM usage, with the second-fastest measure of ops/sec
-4. The common `LinkedQueue` implementation is not the fastest one, even with *O(1)* time complexity, and it's the most wasteful in terms of RAM usage
+2. The fastest implementation is `ChunkedQueue`, and has the lowest RAM usage
+3. The common `LinkedQueue` implementation is not the fastest one, even with *O(1)* time complexity, and it's the most wasteful in terms of RAM usage
+4. Classes `DynamicCyclicQueue` and `LinkedQueue` have quite similar results: the former has a lower RAM usage and the latter performs a bit better.
 
 ## Suggestions
-* Use the provided `DynamicCyclicQueue` for a generic solution
-* For some cases, e.g. telemetry shipping, `ChunkedQueue` is better - very low memory footprint
+* Use the provided `ChunkedQueue` for a generic solution
 
 ## License
 MIT &copy; Ron Klein
