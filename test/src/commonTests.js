@@ -191,6 +191,29 @@ describe('Common API for all implementations', () => {
       });
 
       if (stressTestEnabled && name !== 'DynamicArrayQueue') {
+        describe(name, () => {
+          it('exhaust api', () => {
+            const counts = [3000000, 500000, 100000, 500000, 100000, 500000, 100000, 500000, 100000, 500000, 100000, 500000, 100000, 500000];
+            const queue = new DynamicCyclicQueue();
+            let opIndex = 1;
+            let value = 0;
+            for (let i = 0; i < counts.length; i++) {
+              const count = counts[i];
+              opIndex = 1 - opIndex;
+              if (opIndex === 0) { // enqueue
+                for (let i = 0; i < count; i++) {
+                  queue.enqueue(++value);
+                }
+              } else {
+                for (let i = 0; i < count; i++) {
+                  queue.dequeue();
+                }
+              }
+            }
+            assert.equal(queue.size(), 100000);
+          });
+        });
+
         describe('random enqueue and dequeue actions', () => {
           for (let i = 0; i < stressTestCount; i++) {
             it(`${name} iteration #${i}`, () => {
