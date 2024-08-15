@@ -4,6 +4,8 @@
 
 # lite-fifo
 
+When you're short on RAM but still want a decent FIFO implementation...
+
 ## Lightweight and efficient Queue implementations
 This package aims to provide zero-dependency implementations of a queue, focusing on:
 * memory footprint (RAM)
@@ -11,6 +13,9 @@ This package aims to provide zero-dependency implementations of a queue, focusin
 
 The production code is dependency free. The only dependencies are for testing.
 
+## Benchmarks
+After running several scenarios and comparing to several known implementations, 
+it's clear that this project's flagship `ChunkedQueue` has the lowest RAM usage, with a reasonable throughput (ops/sec). See [benchmarks.md](benchmarks.md) file for a deeper view and analysis. 
 
 ## Installation
 ```bash
@@ -152,6 +157,9 @@ How? when it's full, the next `enqueue` operation would trigger a re-order of th
 This process is *O(1) amortized*, and therefore this is a generic queue, and can be used in any scenario.
 
 # The Benchmark
+For a full deep dive of the scenarios, measurement and comparison with implementations (also external to this project),
+please read [benchmarks.md](benchmarks.md) file.
+
 ## Methodology
 The scenario being checked is the following:  
 set P = 100000  
@@ -161,8 +169,8 @@ do 6 times:
 &nbsp;&nbsp;enqueue 1P  
 &nbsp;&nbsp;dequeue 5P  
 
-Apply this scenario T times (set T=20) for every relevant class (see table below), measure RAM used and ops/sec.  
-Remove best and worst results (in terms of ops/sec), and take the average (mean) from the rest of the results.
+Apply this scenario T times (set T=30) for every relevant class (see table below), measure RAM used and ops/sec.  
+Take the average (mean) of the results.
 
 Note: we took a very large value for P, otherwise complexity related issues won't come up.
 
@@ -170,15 +178,14 @@ Note: we took a very large value for P, otherwise complexity related issues won'
 | Class Name         | Ops/Sec | RAM used (MB) | 
 |:-------------------|--------:|--------------:|
 | DynamicArrayQueue  |   **5** |             8 |
-| ChunkedQueue       |   31800 |        **28** |
-| DynamicCyclicQueue |   27100 |           102 |
-| LinkedQueue        |   29800 |           143 |
+| ChunkedQueue       |   36200 |        **28** |
+| DynamicCyclicQueue |   28200 |            89 |
+| LinkedQueue        |   21300 |           143 |
 
 ## Analysis
 1. The naive implementation, `DynamicArrayQueue`, is so slow that it can't be considered as an option
 2. The fastest implementation is `ChunkedQueue`, and has the lowest RAM usage
 3. The common `LinkedQueue` implementation is not the fastest one, even with *O(1)* time complexity, and it's the most wasteful in terms of RAM usage
-4. Classes `DynamicCyclicQueue` and `LinkedQueue` have quite similar results: the former has a lower RAM usage and the latter performs a bit better.
 
 ## Suggestions
 * Use the provided `ChunkedQueue` for a generic solution

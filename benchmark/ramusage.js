@@ -3,10 +3,26 @@ const { ChunkedQueue } = require('../src/ChunkedQueue');
 const { CyclicQueue } = require('../src/CyclicQueue');
 const { DynamicArrayQueue } = require('../src/DynamicArrayQueue');
 const { DynamicCyclicQueue } = require('../src/DynamicCyclicQueue');
+const MnemonistQueue = require('mnemonist/queue');
+const { Queue: DsaJsQueue } = require('dsa.js');
+const { Queue: EfficientDataStructuresQueue } = require('efficient-data-structures');
+const { Queue: DatastructuresJsQueue } = require('@datastructures-js/queue');
 
 function main (className, chunkSize, counts) {
   let cls;
   switch (className.toLowerCase()) {
+    case 'DatastructuresJsQueue'.toLowerCase():
+      cls = () => new DatastructuresJsQueue();
+      break;
+    case 'MnemonistQueue'.toLowerCase():
+      cls = () => new MnemonistQueue();
+      break;
+    case 'EfficientDataStructuresQueue'.toLowerCase():
+      cls = () => new EfficientDataStructuresQueue();
+      break;
+    case 'DsaJsQueue'.toLowerCase():
+      cls = () => new DsaJsQueue();
+      break;
     case 'LinkedQueue'.toLowerCase():
       cls = () => new LinkedQueue();
       break;

@@ -1,0 +1,19 @@
+{
+  "name": "lite-fifo-benchmark",
+  "version": "0.3.4",
+  "license": "MIT",
+  "scripts": {
+    "benchmark": "node ./report-generator.js",
+    "benchmark-dynamic-array": "node ./report-generator.js ./report-config-dynamic-array.json"
+  },
+  "author": "",
+  "description": "",
+  "dependencies": {
+    "@datastructures-js/queue": "4.2.3",
+    "dsa.js": "2.7.6",
+    "efficient-data-structures": "0.1.310",
+    "markdown-table": "3.0.3",
+    "mnemonist": "0.39.8",
+    "shelljs": "^0.8.5"
+  }
+}
