@@ -1,36 +1,28 @@
 {
   "scenarios": [
     {
-      "name": "enqueue-zig-zag-dequeue",
-      "description": "massive enqueue, then repeated zig-zag with 1/3 of the size, then massive dequeue",
-      "operations": [3000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 3000000]
-    }
-  ],
-  "scenarios1": [
-    {
       "name": "buffer then gradually decrease",
-      "description": "massive enqueue, then gradual dequeue",
+      "description": "Enqueue a lot of items, then dequeue rate > enqueue rate, so gradually remove the items.",
       "operations": [3000000, 500000, 100000, 500000, 100000, 500000, 100000, 500000, 100000, 500000, 100000, 500000, 100000, 500000]
     },
     {
-      "name": "zig-zag",
-      "description": "massive enqueue and massive dequeue repeatedly",
+      "name": "zigzag",
+      "description": "Enqueue a lot, then dequeue to zero, repeatedly.",
       "operations": [3000000, 3000000, 3000000, 3000000, 3000000, 3000000, 3000000, 3000000, 3000000, 3000000, 3000000, 3000000]
     },
     {
-      "name": "enqueue-zig-zag-dequeue",
-      "description": "massive enqueue, then repeated zig-zag with 1/3 of the size, then massive dequeue",
+      "name": "enqueue-zigzag-dequeue",
+      "description": "Enqueue a lot, then [zigzag](#zigzag) with 1/3 of the size, then dequeue to zero.",
       "operations": [3000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 3000000]
     },
     {
       "name": "enqueue only",
-      "description": "massive enqueue and then nothing",
+      "description": "Simply enqueue a lot of items, without any dequeue.",
       "operations": [9000000]
     }
-
   ],
   "classes": ["ChunkedQueue", "MnemonistQueue", "EfficientDataStructuresQueue", "DatastructuresJsQueue", "DsaJsQueue", "DynamicCyclicQueue", "LinkedQueue"],
-  "iterationsPerClass": 30,
+  "iterationsPerClass": 4,
   "shuffle": true,
   "verbose": true
 }

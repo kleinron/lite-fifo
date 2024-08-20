@@ -39,89 +39,89 @@ Enqueue a lot of items, then dequeue rate > enqueue rate, so gradually remove th
 
 ![](/benchmark/images/buffer-then-gradually-decrease.png)
 
-RAM usage
+#### RAM usage
 
-| Implementation name          | RAM usage |
-| :--------------------------- | --------: |
-| ChunkedQueue                 |  28245214 |
-| DynamicCyclicQueue           |  89227384 |
-| EfficientDataStructuresQueue | 100237005 |
-| DsaJsQueue                   | 106247533 |
-| MnemonistQueue               | 118739909 |
-| DatastructuresJsQueue        | 124799171 |
-| LinkedQueue                  | 143345455 |
+| Implementation name          | RAM usage |       Diff |
+| :--------------------------- | --------: | ---------: |
+| ChunkedQueue                 |  28379764 | (baseline) |
+| DatastructuresJsQueue        |  77274972 |      +172% |
+| DynamicCyclicQueue           |  89208348 |      +214% |
+| EfficientDataStructuresQueue | 111981042 |      +294% |
+| MnemonistQueue               | 136571954 |      +381% |
+| DsaJsQueue                   | 142313270 |      +401% |
+| LinkedQueue                  | 143340408 |      +405% |
 
-Operations per second
+#### Operations per second
 
-| Implementation name          | Ops/sec |
-| :--------------------------- | ------: |
-| MnemonistQueue               |   54744 |
-| DatastructuresJsQueue        |   54383 |
-| ChunkedQueue                 |   36275 |
-| DynamicCyclicQueue           |   28231 |
-| LinkedQueue                  |   21294 |
-| EfficientDataStructuresQueue |   17776 |
-| DsaJsQueue                   |   17219 |
+| Implementation name          | Ops/sec |       Diff |
+| :--------------------------- | ------: | ---------: |
+| MnemonistQueue               |   55494 | (baseline) |
+| DatastructuresJsQueue        |   52292 |        -5% |
+| ChunkedQueue                 |   35461 |       -36% |
+| DynamicCyclicQueue           |   27125 |       -51% |
+| LinkedQueue                  |   21202 |       -61% |
+| DsaJsQueue                   |   16975 |       -69% |
+| EfficientDataStructuresQueue |   16812 |       -69% |
 
 ### zigzag
 
 Enqueue a lot, then dequeue to zero, repeatedly.
 
-![](/benchmark/images/zig-zag.png)
+![](/benchmark/images/zigzag.png)
 
-RAM usage
+#### RAM usage
 
-| Implementation name          | RAM usage |
-| :--------------------------- | --------: |
-| ChunkedQueue                 |  54243480 |
-| MnemonistQueue               |  92534230 |
-| DatastructuresJsQueue        | 104901206 |
-| DynamicCyclicQueue           | 118183078 |
-| EfficientDataStructuresQueue | 150362982 |
-| DsaJsQueue                   | 222575471 |
-| LinkedQueue                  | 245446255 |
+| Implementation name          | RAM usage |       Diff |
+| :--------------------------- | --------: | ---------: |
+| ChunkedQueue                 |  55647214 | (baseline) |
+| DatastructuresJsQueue        |  79077452 |       +42% |
+| DynamicCyclicQueue           | 118208608 |      +112% |
+| DsaJsQueue                   | 143181248 |      +157% |
+| EfficientDataStructuresQueue | 143378496 |      +157% |
+| MnemonistQueue               | 158173512 |      +184% |
+| LinkedQueue                  | 209267172 |      +276% |
 
-Operations per second
+#### Operations per second
 
-| Implementation name          | Ops/sec |
-| :--------------------------- | ------: |
-| DatastructuresJsQueue        |   61163 |
-| MnemonistQueue               |   60783 |
-| LinkedQueue                  |   50293 |
-| DynamicCyclicQueue           |   39873 |
-| ChunkedQueue                 |   39110 |
-| EfficientDataStructuresQueue |   22809 |
-| DsaJsQueue                   |   20189 |
+| Implementation name          | Ops/sec |       Diff |
+| :--------------------------- | ------: | ---------: |
+| DatastructuresJsQueue        |   60388 | (baseline) |
+| MnemonistQueue               |   58702 |        -2% |
+| LinkedQueue                  |   47190 |       -21% |
+| ChunkedQueue                 |   38555 |       -36% |
+| DynamicCyclicQueue           |   37621 |       -37% |
+| EfficientDataStructuresQueue |   22436 |       -62% |
+| DsaJsQueue                   |   18806 |       -68% |
 
 ### enqueue-zigzag-dequeue
 
 Enqueue a lot, then [zigzag](#zigzag) with 1/3 of the size, then dequeue to zero.
 
-![](/benchmark/images/enqueue-zig-zag-dequeue.png)
+![](/benchmark/images/enqueue-zigzag-dequeue.png)
 
-RAM usage
+#### RAM usage
 
-| Implementation name          | RAM usage |
-| :--------------------------- | --------: |
-| ChunkedQueue                 |  72945115 |
-| DatastructuresJsQueue        |  84031309 |
-| DynamicCyclicQueue           |  89289878 |
-| MnemonistQueue               |  92892741 |
-| LinkedQueue                  | 279368176 |
-| EfficientDataStructuresQueue | 381811473 |
-| DsaJsQueue                   | 383411005 |
+| Implementation name          | RAM usage |       Diff |
+| :--------------------------- | --------: | ---------: |
+| ChunkedQueue                 |  72885086 | (baseline) |
+| MnemonistQueue               |  79495220 |        +9% |
+| DynamicCyclicQueue           |  89370588 |       +22% |
+| DatastructuresJsQueue        |  96505770 |       +32% |
+| LinkedQueue                  | 279495582 |      +283% |
+| DsaJsQueue                   | 371494706 |      +409% |
+| EfficientDataStructuresQueue | 383364174 |      +425% |
 
-Operations per second
+#### Operations per second
 
-| Implementation name          | Ops/sec |
-| :--------------------------- | ------: |
-| DynamicCyclicQueue           |   84760 |
-| DatastructuresJsQueue        |   68971 |
-| MnemonistQueue               |   67296 |
-| ChunkedQueue                 |   37734 |
-| LinkedQueue                  |   21691 |
-| EfficientDataStructuresQueue |   18619 |
-| DsaJsQueue                   |   18510 |
+| Implementation name          | Ops/sec |       Diff |
+| :--------------------------- | ------: | ---------: |
+| DynamicCyclicQueue           |   81741 | (baseline) |
+| DatastructuresJsQueue        |   65765 |       -19% |
+| MnemonistQueue               |   65699 |       -19% |
+| ChunkedQueue                 |   37037 |       -54% |
+| LinkedQueue                  |   20902 |       -74% |
+| EfficientDataStructuresQueue |   17933 |       -78% |
+| DsaJsQueue                   |   17772 |       -78% |
 
 ### enqueue only
 
@@ -129,31 +129,34 @@ Simply enqueue a lot of items, without any dequeue.
 
 ![](/benchmark/images/enqueue-only.png)
 
-RAM usage
+#### RAM usage
 
-| Implementation name          | RAM usage |
-| :--------------------------- | --------: |
-| ChunkedQueue                 |  81815777 |
-| MnemonistQueue               | 223175067 |
-| DatastructuresJsQueue        | 223232962 |
-| DynamicCyclicQueue           | 292281309 |
-| LinkedQueue                  | 359370061 |
-| DsaJsQueue                   | 431394786 |
-| EfficientDataStructuresQueue | 431398306 |
+| Implementation name          | RAM usage |       Diff |
+| :--------------------------- | --------: | ---------: |
+| ChunkedQueue                 |  81687646 | (baseline) |
+| DatastructuresJsQueue        | 222984634 |      +172% |
+| MnemonistQueue               | 223269990 |      +173% |
+| DynamicCyclicQueue           | 334902982 |      +309% |
+| LinkedQueue                  | 359490772 |      +340% |
+| DsaJsQueue                   | 431317892 |      +428% |
+| EfficientDataStructuresQueue | 431489178 |      +428% |
 
-Operations per second
+#### Operations per second
 
-| Implementation name          | Ops/sec |
-| :--------------------------- | ------: |
-| DatastructuresJsQueue        |   57158 |
-| MnemonistQueue               |   56508 |
-| ChunkedQueue                 |   33323 |
-| DynamicCyclicQueue           |   30282 |
-| LinkedQueue                  |   10025 |
-| EfficientDataStructuresQueue |    9751 |
-| DsaJsQueue                   |    9691 |
+| Implementation name          | Ops/sec |       Diff |
+| :--------------------------- | ------: | ---------: |
+| DatastructuresJsQueue        |   56891 | (baseline) |
+| MnemonistQueue               |   53518 |        -5% |
+| ChunkedQueue                 |   32288 |       -43% |
+| DynamicCyclicQueue           |   29873 |       -47% |
+| LinkedQueue                  |    9683 |       -82% |
+| EfficientDataStructuresQueue |    9452 |       -83% |
+| DsaJsQueue                   |    9334 |       -83% |
+
+
+
 
 # Analysis
 - **In every scenario**, `ChunkedQueue`, introduced in this project, consumes the lowest amount of RAM
-- Performance-wise, in most scenarios, the implementations of [@datastructures-js/queue](https://www.npmjs.com/package/@datastructures-js/queue) and [@datastructures-js/queue](https://www.npmjs.com/package/@datastructures-js/queue) have the highest throughput of operations per second
+- Performance-wise, in most scenarios, the implementations of [@datastructures-js/queue](https://www.npmjs.com/package/@datastructures-js/queue) and [Mnemonist](https://github.com/yomguithereal/mnemonist) have the highest throughput of operations per second
 - Surprisingly, `DynamicCyclicQueue`, also introduced in this project, has the highest throughput in the scenario named [enqueue-zigzag-dequeue](#enqueue-zigzag-dequeue)
