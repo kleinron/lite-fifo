@@ -79,7 +79,6 @@ function avg (arr) {
 const stats = resultsByScenario.entries().map(([scenarioName, resultsByClassName]) => {
   return {
     scenarioName,
-
     stats: resultsByClassName.entries().map(([k, v]) => {
       const avgOpsPerSec = Math.trunc(avg(v.map(x => x.result.opsPerSec)));
       return {
