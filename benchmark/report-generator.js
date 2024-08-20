@@ -17,6 +17,7 @@ reportConfig.scenarios.forEach(scenario => {
     for (let i = 0; i < reportConfig.iterationsPerClass; i++) {
       commandObjects.push({
         scenarioName: scenario.name,
+        scenario: scenario,
         className,
         command: `node ${path.join(__dirname, 'ramusage.js')} ${className} ${scenario.operations.join(' ')}`
       });
@@ -35,17 +36,19 @@ if (reportConfig.shuffle) {
   shuffle(commandObjects);
 }
 
-commandObjects.forEach(commandObject => {
+for (let i = 0; i < commandObjects.length; i++){
+  const commandObject = commandObjects[i];
   const command = commandObject.command;
   const scenarioName = commandObject.scenarioName;
-  myLog(`scenario "${scenarioName}", about to execute command: ${command}`);
+  myLog(`[${i + 1} of ${commandObjects.length}] scenario "${scenarioName}", about to execute command: ${command}`);
   const resp = shell.exec(command, { silent: true });
   resultObjects.push({
     className: commandObject.className,
     scenarioName: scenarioName,
+    scenario: commandObject.scenario,
     result: JSON.parse(resp.stdout)
   });
-});
+}
 
 const resultsByScenario = reportConfig.scenarios.reduce((agg, current) => {
   const m = new Map();
@@ -76,6 +79,7 @@ function avg (arr) {
 const stats = resultsByScenario.entries().map(([scenarioName, resultsByClassName]) => {
   return {
     scenarioName,
+
     stats: resultsByClassName.entries().map(([k, v]) => {
       const avgOpsPerSec = Math.trunc(avg(v.map(x => x.result.opsPerSec)));
       return {
@@ -88,21 +92,44 @@ const stats = resultsByScenario.entries().map(([scenarioName, resultsByClassName
   };
 }).toArray();
 
+console.log('');
+console.log('========= REPORT =========');
+console.log('');
+
 stats.forEach(scenario => {
-  console.log(`scenario: ${scenario.scenarioName}`);
+  console.log(`### ${scenario.scenarioName}`);
   {
     console.log('');
-    console.log('RAM usage');
-    const data = [['Implementation name', 'RAM usage']];
+    const sc = reportConfig.scenarios.find(s => s.name === scenario.scenarioName);
+    console.log(sc.description);
+    console.log('');
+    const imageBareFileName = sc.name.toLowerCase().split(" ").join("-").replace(".", "");
+    console.log('![](/benchmark/images/' + imageBareFileName + '.png)');
+    console.log('');
+    console.log('#### RAM usage');
+    console.log('');
+    const data = [['Implementation name', 'RAM usage', 'Diff']];
     data.push(...scenario.stats.sort((a, b) => a.avgHeapUsed - b.avgHeapUsed).map(item => [item.className, item.avgHeapUsed]));
-    console.log(markdownTable(data, { align: ['l', 'r'] }));
+    data[1].push("(baseline)");
+    const baseline = data[1][1];
+    for (let i = 2; i < data.length; i++) {
+      data[i].push(`+${Math.floor(100 * (-1 + data[i][1] / baseline))}%`);
+    }
+    console.log(markdownTable(data, { align: ['l', 'r', 'r'] }));
   }
   {
     console.log('');
-    console.log('Operations per second');
-    const data = [['Implementation name', 'Ops/sec']];
+    console.log('#### Operations per second');
+    console.log('');
+    const data = [['Implementation name', 'Ops/sec', 'Diff']];
     data.push(...scenario.stats.sort((a, b) => b.avgOpsPerSec - a.avgOpsPerSec).map(item => [item.className, item.avgOpsPerSec]));
-    console.log(markdownTable(data, { align: ['l', 'r'] }));
+    data[1].push("(baseline)");
+    const baseline = data[1][1];
+    for (let i = 2; i < data.length; i++) {
+      data[i].push(`-${Math.floor(100 * (1 - data[i][1] / baseline))}%`);
+    }
+
+    console.log(markdownTable(data, { align: ['l', 'r', 'r'] }));
   }
   console.log('');
 });
