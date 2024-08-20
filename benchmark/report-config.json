@@ -22,7 +22,7 @@
     }
   ],
   "classes": ["ChunkedQueue", "MnemonistQueue", "EfficientDataStructuresQueue", "DatastructuresJsQueue", "DsaJsQueue", "DynamicCyclicQueue", "LinkedQueue"],
-  "iterationsPerClass": 4,
+  "iterationsPerClass": 30,
   "shuffle": true,
   "verbose": true
 }
