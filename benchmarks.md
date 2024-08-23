@@ -1,5 +1,10 @@
 # Benchmarks
 
+## Analysis (TL;DR)
+- **In every scenario**, `ChunkedQueue`, introduced in this project, consumes the lowest amount of RAM
+- Performance-wise, in most scenarios, the implementations of [@datastructures-js/queue](https://www.npmjs.com/package/@datastructures-js/queue) and [Mnemonist](https://github.com/yomguithereal/mnemonist) have the highest throughput of operations per second
+- Surprisingly, `DynamicCyclicQueue`, also introduced in this project, has the highest throughput in the scenario named [enqueue-zigzag-dequeue](#enqueue-zigzag-dequeue)
+
 ## Hardware
 All benchmarks were executed on a [MacBook Pro A2251](https://support.apple.com/en-il/111339)
 
@@ -153,10 +158,7 @@ Simply enqueue a lot of items, without any dequeue.
 | EfficientDataStructuresQueue |    9452 |       -83% |
 | DsaJsQueue                   |    9334 |       -83% |
 
-
-
-
-# Analysis
+## Analysis (Repeated)
 - **In every scenario**, `ChunkedQueue`, introduced in this project, consumes the lowest amount of RAM
 - Performance-wise, in most scenarios, the implementations of [@datastructures-js/queue](https://www.npmjs.com/package/@datastructures-js/queue) and [Mnemonist](https://github.com/yomguithereal/mnemonist) have the highest throughput of operations per second
 - Surprisingly, `DynamicCyclicQueue`, also introduced in this project, has the highest throughput in the scenario named [enqueue-zigzag-dequeue](#enqueue-zigzag-dequeue)
