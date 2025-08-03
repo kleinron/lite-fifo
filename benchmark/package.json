@@ -12,8 +12,8 @@
     "@datastructures-js/queue": "4.2.3",
     "dsa.js": "2.7.6",
     "efficient-data-structures": "0.1.310",
-    "markdown-table": "3.0.3",
-    "mnemonist": "0.39.8",
-    "shelljs": "^0.8.5"
+    "markdown-table": "^3.0.4",
+    "mnemonist": "^0.40.3",
+    "shelljs": "^0.10.0"
   }
 }

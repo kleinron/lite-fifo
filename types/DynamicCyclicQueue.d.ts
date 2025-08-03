@@ -8,7 +8,7 @@ export class DynamicCyclicQueue<T> {
     /**
      * @param {number} [initialCapacity=16] Initial capacity of the underlying array
      */
-    constructor(initialCapacity?: number | undefined);
+    constructor(initialCapacity?: number);
     /** @private */
     private _capacity;
     /**
@@ -110,7 +110,7 @@ export class DynamicCyclicQueue<T> {
      * @param {number} [startIndex=0] Starting index in the array
      * @returns {void}
      */
-    copyTo(arr: T[], startIndex?: number | undefined): void;
+    copyTo(arr: T[], startIndex?: number): void;
     /**
      * Create an array with the same size as the queue, populate it with the items in the queue, keeping the iteration order, and return it.
      * @returns {T[]} Array containing all queue items

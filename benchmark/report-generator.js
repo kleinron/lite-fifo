@@ -17,7 +17,7 @@ reportConfig.scenarios.forEach(scenario => {
     for (let i = 0; i < reportConfig.iterationsPerClass; i++) {
       commandObjects.push({
         scenarioName: scenario.name,
-        scenario: scenario,
+        scenario,
         className,
         command: `node ${path.join(__dirname, 'ramusage.js')} ${className} ${scenario.operations.join(' ')}`
       });
@@ -44,7 +44,7 @@ for (let i = 0; i < commandObjects.length; i++) {
   const resp = shell.exec(command, { silent: true });
   resultObjects.push({
     className: commandObject.className,
-    scenarioName: scenarioName,
+    scenarioName,
     scenario: commandObject.scenario,
     result: JSON.parse(resp.stdout)
   });
@@ -83,7 +83,7 @@ const stats = resultsByScenario.entries().map(([scenarioName, resultsByClassName
       const avgOpsPerSec = Math.trunc(avg(v.map(x => x.result.opsPerSec)));
       return {
         className: k,
-        avgOpsPerSec: avgOpsPerSec,
+        avgOpsPerSec,
         avgHeapUsed: Math.trunc(avg(v.map(x => x.result.heapUsed))),
         avgHeapUsedLog10: Math.trunc(100 * Math.log10(avg(v.map(x => x.result.heapUsed)))) / 100
       };

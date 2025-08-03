@@ -5,9 +5,9 @@ const { DynamicCyclicQueue } = require('./DynamicCyclicQueue');
 const { LinkedQueue } = require('./LinkedQueue');
 
 module.exports = {
-  ChunkedQueue: ChunkedQueue,
-  DynamicArrayQueue: DynamicArrayQueue,
-  DynamicCyclicQueue: DynamicCyclicQueue,
-  LinkedQueue: LinkedQueue,
-  CyclicQueue: CyclicQueue
+  ChunkedQueue,
+  DynamicArrayQueue,
+  DynamicCyclicQueue,
+  LinkedQueue,
+  CyclicQueue
 };

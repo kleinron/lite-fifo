@@ -85,7 +85,7 @@ export class LinkedQueue<T> {
      * @param {number} [startIndex=0] Starting index in the array
      * @returns {void}
      */
-    copyTo(arr: T[], startIndex?: number | undefined): void;
+    copyTo(arr: T[], startIndex?: number): void;
     /**
      * Create an array with the same size as the queue, populate it with the items in the queue, keeping the iteration order, and return it.
      * @returns {T[]} Array containing all queue items

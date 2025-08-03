@@ -8,7 +8,7 @@ export class CyclicQueue<T> {
     /**
      * @param {number} [capacity=16] Maximum number of items the queue can hold
      */
-    constructor(capacity?: number | undefined);
+    constructor(capacity?: number);
     /** @private */
     private _capacity;
     /**
@@ -105,7 +105,7 @@ export class CyclicQueue<T> {
      * @param {number} [startIndex=0] Starting index in the array
      * @returns {void}
      */
-    copyTo(arr: T[], startIndex?: number | undefined): void;
+    copyTo(arr: T[], startIndex?: number): void;
     /**
      * Create an array with the same size as the queue, populate it with the items in the queue, keeping the iteration order, and return it.
      * @returns {T[]} Array containing all queue items

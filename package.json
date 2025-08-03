@@ -1,6 +1,6 @@
 {
   "name": "lite-fifo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "main": "src/index.js",
   "types": "types/index.d.ts",
@@ -13,10 +13,10 @@
   "homepage": "https://github.com/kleinron/lite-fifo.git#readme",
   "description": "Lightweight, optimized, and efficient implementations for FIFO (queue) data structure",
   "devDependencies": {
-    "mocha": "10.1.0",
+    "mocha": "^11.7.1",
     "seedrandom": "^3.0.5",
-    "semistandard": "^16.0.1",
-    "typescript": "^4.6.4"
+    "semistandard": "^17.0.0",
+    "typescript": "^5.9.2"
   },
   "scripts": {
     "lint": "semistandard",
