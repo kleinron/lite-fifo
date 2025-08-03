@@ -8,6 +8,10 @@
     "declaration": true,
     "emitDeclarationOnly": true,
     "declarationMap": true,
-    "target": "es2015"
+    "target": "es2015",
+    "strict": true,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "moduleResolution": "node"
   }
 }

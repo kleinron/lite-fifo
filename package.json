@@ -1,9 +1,15 @@
 {
   "name": "lite-fifo",
-  "version": "0.3.4",
+  "version": "1.0.0",
   "license": "MIT",
   "main": "src/index.js",
   "types": "types/index.d.ts",
+  "files": [
+    "src/",
+    "types/",
+    "README.md",
+    "LICENSE"
+  ],
   "homepage": "https://github.com/kleinron/lite-fifo.git#readme",
   "description": "Lightweight, optimized, and efficient implementations for FIFO (queue) data structure",
   "devDependencies": {
@@ -17,7 +23,12 @@
     "lint-with-fix": "semistandard --fix",
     "test": "mocha test/ --recursive --check-leaks --require test/src/setup.js",
     "test-stress": "export STRESS_TESTS_ENABLED=true && export STRESS_TESTS_COUNT=10000 && mocha test/ --recursive --check-leaks --require test/src/setup.js",
-    "types": "node ./node_modules/typescript/bin/tsc"
+    "types": "node ./node_modules/typescript/bin/tsc",
+    "ci": "npm run lint && npm run test && npm run types",
+    "prepack": "npm run ci && npm run test-stress",
+    "prepublishOnly": "npm run ci && npm pack --dry-run",
+    "publish-check": "npm run ci && npm pack --dry-run && echo '✅ Ready to publish!'",
+    "release": "npm run ci && npm publish"
   },
   "author": {
     "name": "Ron Klein",

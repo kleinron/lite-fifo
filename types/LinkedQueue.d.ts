@@ -1,20 +1,27 @@
 /**
- * @type LinkedQueue
+ * A queue implementation using a singly-linked list.
+ * Provides O(1) operations for all queue methods with unlimited capacity.
+ *
+ * @template T The type of items stored in the queue
  */
-export class LinkedQueue {
+export class LinkedQueue<T> {
     /**
      * Clear the queue.
      * @returns {void}
      */
     clear(): void;
-    _newest: any;
-    _oldest: any;
-    _size: any;
+    /** @private */
+    private _newest;
+    /** @private */
+    private _oldest;
+    /** @private */
+    private _size;
     /**
-     * @param {any} item
+     * Add an item to the queue.
+     * @param {T} item The item to add
      * @returns {void}
      */
-    enqueue(item: any): void;
+    enqueue(item: T): void;
     /**
      * Return the current size of the queue.
      * @returns {number}
@@ -22,42 +29,41 @@ export class LinkedQueue {
     size(): number;
     /**
      * Return the first inserted (or the "oldest") item in the queue, and removes it from the queue.
-     * @returns {any}
-     * @throws {Error} Might throw an exception if the queue is empty.
+     * @returns {T} The dequeued item
+     * @throws {Error} If the queue is empty
      */
-    dequeue(): any;
+    dequeue(): T;
     /**
      * Return the last inserted (or the "newest") item in the queue, without removing it from the queue.
-     * @returns {any}
+     * @returns {T} The newest item
      * @throws {Error} if the queue is empty
      */
-    peekLast(): any;
+    peekLast(): T;
     /**
      * Return the first inserted (or the "oldest") item in the queue, without removing it from the queue.
-     * @returns {any}
+     * @returns {T} The oldest item
      * @throws {Error} if the queue is empty
      */
-    peekFirst(): any;
+    peekFirst(): T;
     /**
-     * Copy the items of the queue to the given array arr, starting from index startIndex.
-     * First item in the array is first item inserted to the queue, and so forth.
-     * @param {any[]} arr
-     * @param {number} [startIndex=0]
-     * @returns {void}
+     * Return the oldest item without removing it from the queue.
+     * This is an alias for peekFirst() and the standard queue peek operation.
+     * @returns {T} The oldest item
+     * @throws {Error} if the queue is empty
      */
-    copyTo(arr: any[], startIndex?: number): void;
+    peek(): T;
     /**
-     * Create an array with the same size as the queue, populate it with the items in the queue, keeping the iteration order, and return it.
-     * @returns {any[]}
+     * Check if the queue is empty.
+     * @returns {boolean} True if the queue is empty
      */
-    toArray(): any[];
+    isEmpty(): boolean;
     /**
      * Iterate over the items in the queue.
      * Every iterated item is removed from the queue.
      * Iteration order is the insertion order: first inserted item would be returned first.
      *
      * @example
-     * const queue = new DynamicArrayQueue();
+     * const queue = new LinkedQueue();
      * queue.enqueue(123);
      * queue.enqueue(45);
      * for (let item of queue.drainingIterator()) {
@@ -69,20 +75,26 @@ export class LinkedQueue {
      * // 45
      * // size = 0
      *
-     * @returns {{[Symbol.iterator]: (function(): {next: function(): ({done: boolean, value?: any})})}}
+     * @returns {Generator<T, void, unknown>}
      */
-    drainingIterator(): {
-        [Symbol.iterator]: (() => {
-            next: () => ({
-                done: boolean;
-                value?: any;
-            });
-        });
-    };
+    drainingIterator(): Generator<T, void, unknown>;
+    /**
+     * Copy the items of the queue to the given array arr, starting from index startIndex.
+     * First item in the array is first item inserted to the queue, and so forth.
+     * @param {T[]} arr The target array
+     * @param {number} [startIndex=0] Starting index in the array
+     * @returns {void}
+     */
+    copyTo(arr: T[], startIndex?: number | undefined): void;
+    /**
+     * Create an array with the same size as the queue, populate it with the items in the queue, keeping the iteration order, and return it.
+     * @returns {T[]} Array containing all queue items
+     */
+    toArray(): T[];
     /**
      * Return a JSON representation (as a string) of the queue.
      * The queue is represented as an array: first item in the array is the first one inserted to the queue and so forth.
-     * @returns {string}
+     * @returns {string} JSON string representation
      */
     toJSON(): string;
     /**
@@ -91,7 +103,7 @@ export class LinkedQueue {
      * In essence this supports JS iterations of the pattern `for (let x of queue) { ... }.`
      *
      * @example
-     * const queue = new DynamicArrayQueue();
+     * const queue = new LinkedQueue();
      * queue.enqueue(123);
      * queue.enqueue(45);
      * for (let item of queue) {
@@ -102,15 +114,8 @@ export class LinkedQueue {
      * // 45
      * // and the queue would remain unchanged
      *
-     * @returns {{[Symbol.iterator]: (function(): {next: function(): ({done: boolean, value?: any})})}}
+     * @returns {Generator<T, void, unknown>}
      */
-    [Symbol.iterator](): {
-        [Symbol.iterator]: (() => {
-            next: () => ({
-                done: boolean;
-                value?: any;
-            });
-        });
-    };
+    [Symbol.iterator](): Generator<T, void, unknown>;
 }
 //# sourceMappingURL=LinkedQueue.d.ts.map

@@ -338,6 +338,135 @@ describe('Common API for all implementations', () => {
           assert.deepStrictEqual(queue.toArray(), []);
         });
       });
+
+      describe('peek', () => {
+        it('raises an exception on an empty queue', () => {
+          const queue = queueFactory.create();
+          assert.throws(queue.peek);
+        });
+
+        it('returns the first item after a single enqueue action', () => {
+          const queue = queueFactory.create();
+          queue.enqueue(123);
+          assert.strictEqual(queue.peek(), 123);
+        });
+
+        it('returns the first item without removing it', () => {
+          const queue = queueFactory.create();
+          queue.enqueue(123);
+          if (!queue.capacity || queue.capacity() > 1) {
+            queue.enqueue(456);
+            assert.strictEqual(queue.peek(), 123);
+            assert.strictEqual(queue.size(), 2); // Ensure item not removed
+            assert.strictEqual(queue.dequeue(), 123); // Verify it's still there
+          } else {
+            // For capacity 1 queues, just test with single item
+            assert.strictEqual(queue.peek(), 123);
+            assert.strictEqual(queue.size(), 1); // Ensure item not removed
+            assert.strictEqual(queue.dequeue(), 123); // Verify it's still there
+          }
+        });
+
+        it('returns the first item after several enqueue actions', () => {
+          const queue = queueFactory.create();
+          const firstNumber = randomNumber(600);
+          queue.enqueue(firstNumber);
+
+          if (queue.capacity && queue.capacity() === 1) {
+            // For capacity 1 queues, we can't add more items after the first
+            assert.strictEqual(queue.peek(), firstNumber);
+          } else {
+            // For unlimited or larger capacity queues
+            const maxItems = queue.capacity ? Math.min(queue.capacity() - 1, 10) : 10;
+            const n = Math.max(0, Math.min(randomNumber(maxItems), maxItems));
+            for (let i = 0; i < n; i++) {
+              queue.enqueue(randomNumber());
+            }
+            assert.strictEqual(queue.peek(), firstNumber);
+          }
+        });
+
+        it('returns the first item after enqueue-dequeue-enqueue', () => {
+          const queue = queueFactory.create();
+          const number1 = randomNumber(600);
+          queue.enqueue(number1);
+          queue.dequeue();
+          const number2 = randomNumber(600);
+          queue.enqueue(number2);
+
+          assert.strictEqual(queue.peek(), number2);
+        });
+
+        it('is equivalent to peekFirst', () => {
+          const queue = queueFactory.create();
+          const numbers = [];
+          const n = Math.max(1, randomNumber(queue.capacity ? queue.capacity() : undefined));
+          for (let i = 0; i < n; i++) {
+            numbers[i] = randomNumber();
+          }
+          numbers.forEach(number => queue.enqueue(number));
+
+          assert.strictEqual(queue.peek(), queue.peekFirst());
+        });
+      });
+
+      describe('isEmpty', () => {
+        it('returns true for a new queue', () => {
+          const queue = queueFactory.create();
+          assert.strictEqual(queue.isEmpty(), true);
+        });
+
+        it('returns false after enqueue', () => {
+          const queue = queueFactory.create();
+          queue.enqueue(123);
+          assert.strictEqual(queue.isEmpty(), false);
+        });
+
+        it('returns true after enqueue and dequeue', () => {
+          const queue = queueFactory.create();
+          queue.enqueue(123);
+          queue.dequeue();
+          assert.strictEqual(queue.isEmpty(), true);
+        });
+
+        it('returns false after multiple enqueues', () => {
+          const queue = queueFactory.create();
+          if (queue.capacity && queue.capacity() === 1) {
+            // For capacity 1 queues, just enqueue one item
+            queue.enqueue(randomNumber());
+            assert.strictEqual(queue.isEmpty(), false);
+          } else {
+            // For unlimited or larger capacity queues
+            const maxItems = queue.capacity ? queue.capacity() : 10;
+            const n = Math.max(2, Math.min(randomNumber(maxItems), maxItems));
+            for (let i = 0; i < n; i++) {
+              queue.enqueue(randomNumber());
+            }
+            assert.strictEqual(queue.isEmpty(), false);
+          }
+        });
+
+        it('returns true after clear', () => {
+          const queue = queueFactory.create();
+          const n = Math.max(1, randomNumber(queue.capacity ? queue.capacity() : undefined));
+          for (let i = 0; i < n; i++) {
+            queue.enqueue(randomNumber());
+          }
+          queue.clear();
+          assert.strictEqual(queue.isEmpty(), true);
+        });
+
+        it('is equivalent to size() === 0', () => {
+          const queue = queueFactory.create();
+          assert.strictEqual(queue.isEmpty(), queue.size() === 0);
+
+          queue.enqueue(123);
+          assert.strictEqual(queue.isEmpty(), queue.size() === 0);
+
+          queue.dequeue();
+          assert.strictEqual(queue.isEmpty(), queue.size() === 0);
+        });
+      });
     });
   }
 });

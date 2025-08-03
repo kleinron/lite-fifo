@@ -1,14 +1,18 @@
+// noinspection JSUnusedGlobalSymbols
+
 const { bindMethods } = require('./util');
 const MAX_ARRAY_SIZE = 4294967295;
 const MIN_INITIAL_CAPACITY = 4;
 
 /**
- * @type DynamicCyclicQueue
+ * A queue implementation using a dynamic circular buffer that can expand when full.
+ * Provides O(1) amortized operations with unlimited capacity.
+ *
+ * @template T The type of items stored in the queue
  */
 class DynamicCyclicQueue {
   /**
-   * @param {number} [initialCapacity]
-   * @returns {DynamicCyclicQueue}
+   * @param {number} [initialCapacity=16] Initial capacity of the underlying array
    */
   constructor (initialCapacity) {
     if (initialCapacity === undefined) {
@@ -17,6 +21,8 @@ class DynamicCyclicQueue {
     if (typeof initialCapacity !== 'number') {
       throw new Error('initialCapacity must a number');
     }
+
+    /** @private */
     this._capacity = Math.floor(initialCapacity);
     if (initialCapacity <= MIN_INITIAL_CAPACITY) {
       throw new Error(`initialCapacity must be greater than ${MIN_INITIAL_CAPACITY} (current value is ${initialCapacity})`);
@@ -30,9 +36,13 @@ class DynamicCyclicQueue {
    * @returns {void}
    */
   clear () {
+    /** @private */
     this._arr = new Array(this._capacity);
+    /** @private */
     this._size = 0;
+    /** @private */
     this._lastIndex = 0;
+    /** @private */
     this._firstIndex = 0;
   }
 
@@ -45,29 +55,39 @@ class DynamicCyclicQueue {
   }
 
   /**
+   * @private
    * @returns {void}
    */
   _expand () {
-    // increase by 1.5
-    const newSize = Math.min(MAX_ARRAY_SIZE, this._size + (this._size >> 1));
-    if (newSize === this._size) {
-      throw new Error('reached max capacity');
+    const newCapacity = Math.min(this._arr.length * 2, MAX_ARRAY_SIZE);
+    if (newCapacity === this._arr.length) {
+      throw new Error('queue overflow, exceeded maximum array size');
     }
-    this._normalizeToZeroIndex();
-    this._lastIndex = this._size - 1;
-    for (let i = 0; i < (newSize - this._size); ++i) {
-      this._arr.push(null);
-    }
+    this._reorderAndExpand(newCapacity);
+  }
+
+  /**
+   * @private
+   * @param {number} newCapacity
+   * @returns {void}
+   */
+  _reorderAndExpand (newCapacity) {
+    const newArr = new Array(newCapacity);
+    this.copyTo(newArr);
+    this._arr = newArr;
+    this._firstIndex = 0;
+    this._lastIndex = this._size === 0 ? 0 : this._size - 1;
   }
 
   /**
    * Add an item to the queue.
-   * @param {any} item
+   * @param {T} item The item to add
    * @returns {void}
    */
   enqueue (item) {
-    this._expandIfNeeded();
-
+    if (this._size === this._arr.length) {
+      this._expand();
+    }
     if (this._size === 0) {
       this._arr[this._firstIndex = this._lastIndex = 0] = item;
     } else {
@@ -77,68 +97,7 @@ class DynamicCyclicQueue {
   }
 
   /**
-   * @returns {void}
-   */
-  _expandIfNeeded () {
-    if (this._size === this._arr.length) {
-      this._expand();
-    }
-  }
-
-  // in-place
-  _cyclicLeftShift (arr, steps) {
-    if (steps < 0) throw new Error('steps must be a non negative number');
-
-    let processed = 0;
-    let cycleIdx = 0;
-    while (processed !== arr.length) {
-      let idx = cycleIdx;
-      let swapIdx = this._fixOverflow(idx + steps);
-      const tmp = arr[idx];
-      while (swapIdx !== cycleIdx) {
-        arr[idx] = arr[swapIdx];
-        processed += 1;
-        idx = swapIdx;
-        swapIdx = this._fixOverflow(idx + steps);
-      }
-      arr[idx] = tmp;
-      processed += 1;
-      cycleIdx += 1;
-    }
-  }
-
-  /**
-   * @returns {void}
-   */
-  _normalizeToZeroIndex () {
-    if (this._firstIndex === 0) {
-      return;
-    }
-
-    this._cyclicLeftShift(this._arr, this._firstIndex);
-
-    // this._arr = temp;
-    this._firstIndex = 0;
-    if (this._size === 0) {
-      this._lastIndex = 0;
-    } else {
-      this._lastIndex = this._increaseMod(this._size - 1);
-    }
-  }
-
-  /**
-   * @param {number} n
-   * @returns {number}
-   */
-  _fixOverflow (n) {
-    if (this._arr.length === 0) {
-      if (n === 0) return 0;
-      throw new Error('cannot fix overflow of a zero length array');
-    }
-    return n < this._arr.length ? n : n - this._arr.length;
-  }
-
-  /**
+   * @private
    * @param {number} val
    * @returns {number}
    */
@@ -148,8 +107,8 @@ class DynamicCyclicQueue {
 
   /**
    * Return the first inserted (or the "oldest") item in the queue, and removes it from the queue.
-   * @returns {any}
-   * @throws {Error} Might throw an exception if the queue is empty.
+   * @returns {T} The dequeued item
+   * @throws {Error} If the queue is empty
    */
   dequeue () {
     if (this._size === 0) {
@@ -159,34 +118,12 @@ class DynamicCyclicQueue {
     this._arr[this._firstIndex] = null;
     this._firstIndex = this._increaseMod(this._firstIndex);
     this._size--;
-    this._reduceIfNeeded();
     return result;
   }
 
   /**
-   * @returns {void}
-   */
-  _reduceIfNeeded () {
-    if (this._size <= MIN_INITIAL_CAPACITY) {
-      return;
-    }
-
-    // check if current size is 1/3 or less of allocated array
-    if (((this._size << 1) + this._size) <= this._arr.length) {
-      this._normalizeToZeroIndex();
-      // re-allocate so that new capacity is (size * 2)
-      const reduceCount = this._arr.length - (this._size << 1);
-      for (let i = 0; i < reduceCount; i++) {
-        this._arr.pop();
-      }
-      this._firstIndex = 0;
-      this._lastIndex = this._size - 1;
-    }
-  }
-
-  /**
    * Return the last inserted (or the "newest") item in the queue, without removing it from the queue.
-   * @returns {any}
+   * @returns {T} The newest item
    * @throws {Error} if the queue is empty
    */
   peekLast () {
@@ -198,7 +135,7 @@ class DynamicCyclicQueue {
 
   /**
    * Return the first inserted (or the "oldest") item in the queue, without removing it from the queue.
-   * @returns {any}
+   * @returns {T} The oldest item
    * @throws {Error} if the queue is empty
    */
   peekFirst () {
@@ -209,12 +146,30 @@ class DynamicCyclicQueue {
   }
 
   /**
+   * Return the oldest item without removing it from the queue.
+   * This is an alias for peekFirst() and the standard queue peek operation.
+   * @returns {T} The oldest item
+   * @throws {Error} if the queue is empty
+   */
+  peek () {
+    return this.peekFirst();
+  }
+
+  /**
+   * Check if the queue is empty.
+   * @returns {boolean} True if the queue is empty
+   */
+  isEmpty () {
+    return this._size === 0;
+  }
+
+  /**
    * Iterate over the items in the queue without changing the queue.
    * Iteration order is the insertion order: first inserted item would be returned first.
    * In essence this supports JS iterations of the pattern `for (let x of queue) { ... }.`
    *
    * @example
-   * const queue = new DynamicArrayQueue();
+   * const queue = new DynamicCyclicQueue();
    * queue.enqueue(123);
    * queue.enqueue(45);
    * for (let item of queue) {
@@ -225,7 +180,7 @@ class DynamicCyclicQueue {
    * // 45
    * // and the queue would remain unchanged
    *
-   * @returns {{next: function(): ({done: boolean, value?: any})}}
+   * @returns {Generator<T, void, unknown>}
    */
   [Symbol.iterator] () {
     let firstIndex = this._firstIndex;
@@ -253,7 +208,7 @@ class DynamicCyclicQueue {
    * Iteration order is the insertion order: first inserted item would be returned first.
    *
    * @example
-   * const queue = new DynamicArrayQueue();
+   * const queue = new DynamicCyclicQueue();
    * queue.enqueue(123);
    * queue.enqueue(45);
    * for (let item of queue.drainingIterator()) {
@@ -265,7 +220,7 @@ class DynamicCyclicQueue {
    * // 45
    * // size = 0
    *
-   * @returns {{[Symbol.iterator]: (function(): {next: function(): ({done: boolean, value?: any})})}}
+   * @returns {Generator<T, void, unknown>}
    */
   drainingIterator () {
     const me = this;
@@ -288,8 +243,8 @@ class DynamicCyclicQueue {
   /**
    * Copy the items of the queue to the given array arr, starting from index startIndex.
    * First item in the array is first item inserted to the queue, and so forth.
-   * @param {any[]} arr
-   * @param {number} [startIndex=0]
+   * @param {T[]} arr The target array
+   * @param {number} [startIndex=0] Starting index in the array
    * @returns {void}
    */
   copyTo (arr, startIndex) {
@@ -305,7 +260,7 @@ class DynamicCyclicQueue {
 
   /**
    * Create an array with the same size as the queue, populate it with the items in the queue, keeping the iteration order, and return it.
-   * @returns {any[]}
+   * @returns {T[]} Array containing all queue items
    */
   toArray () {
     const arr = new Array(this.size());
@@ -316,7 +271,7 @@ class DynamicCyclicQueue {
   /**
    * Return a JSON representation (as a string) of the queue.
    * The queue is represented as an array: first item in the array is the first one inserted to the queue and so forth.
-   * @returns {string}
+   * @returns {string} JSON string representation
    */
   toJSON () {
     return JSON.stringify(this.toArray());

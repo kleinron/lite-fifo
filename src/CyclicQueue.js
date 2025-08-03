@@ -1,12 +1,16 @@
+// noinspection JSUnusedGlobalSymbols
+
 const { bindMethods } = require('./util');
 
 /**
- * @type CyclicQueue
+ * A bounded queue implementation using a circular buffer (ring buffer).
+ * Provides excellent performance with O(1) operations but has a fixed capacity.
+ *
+ * @template T The type of items stored in the queue
  */
 class CyclicQueue {
   /**
-   * @param {number} [capacity]
-   * @returns {CyclicQueue}
+   * @param {number} [capacity=16] Maximum number of items the queue can hold
    */
   constructor (capacity) {
     if (capacity === undefined) {
@@ -15,6 +19,8 @@ class CyclicQueue {
     if (typeof capacity !== 'number') {
       throw new Error('capacity must a number');
     }
+
+    /** @private */
     this._capacity = Math.floor(capacity);
     if (capacity <= 0) {
       throw new Error(`capacity must be positive (current value is ${capacity})`);
@@ -28,14 +34,19 @@ class CyclicQueue {
    * @returns {void}
    */
   clear () {
+    /** @private */
     this._arr = new Array(this._capacity);
+    /** @private */
     this._size = 0;
+    /** @private */
     this._lastIndex = 0;
+    /** @private */
     this._firstIndex = 0;
   }
 
   /**
-   * @returns {number}
+   * Return the maximum capacity of the queue.
+   * @returns {number} The maximum capacity
    */
   capacity () {
     return this._arr.length;
@@ -51,9 +62,9 @@ class CyclicQueue {
 
   /**
    * Add an item to the queue.
-   * @param {any} item
+   * @param {T} item The item to add
    * @returns {void}
-   * @throws {Error} Might throw an exception if the capacity is exceeded.
+   * @throws {Error} If the capacity is exceeded
    */
   enqueue (item) {
     if (this._size === this._arr.length) {
@@ -68,6 +79,8 @@ class CyclicQueue {
   }
 
   /**
+   * @private
+   * @param {number} val
    * @returns {number}
    */
   _increaseMod (val) {
@@ -76,8 +89,8 @@ class CyclicQueue {
 
   /**
    * Return the first inserted (or the "oldest") item in the queue, and removes it from the queue.
-   * @returns {any}
-   * @throws {Error} Might throw an exception if the queue is empty.
+   * @returns {T} The dequeued item
+   * @throws {Error} If the queue is empty
    */
   dequeue () {
     if (this._size === 0) {
@@ -92,7 +105,7 @@ class CyclicQueue {
 
   /**
    * Return the last inserted (or the "newest") item in the queue, without removing it from the queue.
-   * @returns {any}
+   * @returns {T} The newest item
    * @throws {Error} if the queue is empty
    */
   peekLast () {
@@ -104,7 +117,7 @@ class CyclicQueue {
 
   /**
    * Return the first inserted (or the "oldest") item in the queue, without removing it from the queue.
-   * @returns {any}
+   * @returns {T} The oldest item
    * @throws {Error} if the queue is empty
    */
   peekFirst () {
@@ -115,12 +128,30 @@ class CyclicQueue {
   }
 
   /**
+   * Return the oldest item without removing it from the queue.
+   * This is an alias for peekFirst() and the standard queue peek operation.
+   * @returns {T} The oldest item
+   * @throws {Error} if the queue is empty
+   */
+  peek () {
+    return this.peekFirst();
+  }
+
+  /**
+   * Check if the queue is empty.
+   * @returns {boolean} True if the queue is empty
+   */
+  isEmpty () {
+    return this._size === 0;
+  }
+
+  /**
    * Iterate over the items in the queue without changing the queue.
    * Iteration order is the insertion order: first inserted item would be returned first.
    * In essence this supports JS iterations of the pattern `for (let x of queue) { ... }.`
    *
    * @example
-   * const queue = new DynamicArrayQueue();
+   * const queue = new CyclicQueue();
    * queue.enqueue(123);
    * queue.enqueue(45);
    * for (let item of queue) {
@@ -131,7 +162,7 @@ class CyclicQueue {
    * // 45
    * // and the queue would remain unchanged
    *
-   * @returns {{[Symbol.iterator]: (function(): {next: function(): ({done: boolean, value?: any})})}}
+   * @returns {Generator<T, void, unknown>}
    */
   [Symbol.iterator] () {
     let firstIndex = this._firstIndex;
@@ -159,7 +190,7 @@ class CyclicQueue {
    * Iteration order is the insertion order: first inserted item would be returned first.
    *
    * @example
-   * const queue = new DynamicArrayQueue();
+   * const queue = new CyclicQueue();
    * queue.enqueue(123);
    * queue.enqueue(45);
    * for (let item of queue.drainingIterator()) {
@@ -171,7 +202,7 @@ class CyclicQueue {
    * // 45
    * // size = 0
    *
-   * @returns {{[Symbol.iterator]: (function(): {next: function(): ({done: boolean, value?: any})})}}
+   * @returns {Generator<T, void, unknown>}
    */
   drainingIterator () {
     const me = this;
@@ -194,8 +225,8 @@ class CyclicQueue {
   /**
    * Copy the items of the queue to the given array arr, starting from index startIndex.
    * First item in the array is first item inserted to the queue, and so forth.
-   * @param {any[]} arr
-   * @param {number} [startIndex=0]
+   * @param {T[]} arr The target array
+   * @param {number} [startIndex=0] Starting index in the array
    * @returns {void}
    */
   copyTo (arr, startIndex) {
@@ -211,7 +242,7 @@ class CyclicQueue {
 
   /**
    * Create an array with the same size as the queue, populate it with the items in the queue, keeping the iteration order, and return it.
-   * @returns {any[]}
+   * @returns {T[]} Array containing all queue items
    */
   toArray () {
     const arr = new Array(this.size());
@@ -222,7 +253,7 @@ class CyclicQueue {
   /**
    * Return a JSON representation (as a string) of the queue.
    * The queue is represented as an array: first item in the array is the first one inserted to the queue and so forth.
-   * @returns {string}
+   * @returns {string} JSON string representation
    */
   toJSON () {
     return JSON.stringify(this.toArray());

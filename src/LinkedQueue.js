@@ -1,11 +1,16 @@
+// noinspection JSUnusedGlobalSymbols
+
 const { bindMethods } = require('./util');
 
 /**
- * @type LinkedQueue
+ * A queue implementation using a singly-linked list.
+ * Provides O(1) operations for all queue methods with unlimited capacity.
+ *
+ * @template T The type of items stored in the queue
  */
 class LinkedQueue {
   /**
-   * @returns {LinkedQueue}
+   * Create a new LinkedQueue instance.
    */
   constructor () {
     bindMethods.call(this);
@@ -17,13 +22,17 @@ class LinkedQueue {
    * @returns {void}
    */
   clear () {
+    /** @private */
     this._newest = null;
+    /** @private */
     this._oldest = null;
+    /** @private */
     this._size = 0;
   }
 
   /**
-   * @param {any} item
+   * Add an item to the queue.
+   * @param {T} item The item to add
    * @returns {void}
    */
   enqueue (item) {
@@ -48,24 +57,22 @@ class LinkedQueue {
 
   /**
    * Return the first inserted (or the "oldest") item in the queue, and removes it from the queue.
-   * @returns {any}
-   * @throws {Error} Might throw an exception if the queue is empty.
+   * @returns {T} The dequeued item
+   * @throws {Error} If the queue is empty
    */
   dequeue () {
     if (this._size === 0) {
       throw new Error('cannot dequeue from an empty queue');
     }
-    const oldest = this._oldest;
-    const result = oldest.value;
-    this._oldest = oldest.next;
-    oldest.value = oldest.next = null;
+    const result = this._oldest.value;
+    this._oldest = this._oldest.next;
     this._size--;
     return result;
   }
 
   /**
    * Return the last inserted (or the "newest") item in the queue, without removing it from the queue.
-   * @returns {any}
+   * @returns {T} The newest item
    * @throws {Error} if the queue is empty
    */
   peekLast () {
@@ -77,7 +84,7 @@ class LinkedQueue {
 
   /**
    * Return the first inserted (or the "oldest") item in the queue, without removing it from the queue.
-   * @returns {any}
+   * @returns {T} The oldest item
    * @throws {Error} if the queue is empty
    */
   peekFirst () {
@@ -88,12 +95,30 @@ class LinkedQueue {
   }
 
   /**
+   * Return the oldest item without removing it from the queue.
+   * This is an alias for peekFirst() and the standard queue peek operation.
+   * @returns {T} The oldest item
+   * @throws {Error} if the queue is empty
+   */
+  peek () {
+    return this.peekFirst();
+  }
+
+  /**
+   * Check if the queue is empty.
+   * @returns {boolean} True if the queue is empty
+   */
+  isEmpty () {
+    return this._size === 0;
+  }
+
+  /**
    * Iterate over the items in the queue without changing the queue.
    * Iteration order is the insertion order: first inserted item would be returned first.
    * In essence this supports JS iterations of the pattern `for (let x of queue) { ... }.`
    *
    * @example
-   * const queue = new DynamicArrayQueue();
+   * const queue = new LinkedQueue();
    * queue.enqueue(123);
    * queue.enqueue(45);
    * for (let item of queue) {
@@ -104,49 +129,21 @@ class LinkedQueue {
    * // 45
    * // and the queue would remain unchanged
    *
-   * @returns {{[Symbol.iterator]: (function(): {next: function(): ({done: boolean, value?: any})})}}
+   * @returns {Generator<T, void, unknown>}
    */
   [Symbol.iterator] () {
-    let itOldest = this._oldest;
+    let cursor = this._oldest;
     return {
       next: function () {
-        if (itOldest === null) {
+        if (cursor === null) {
           return { done: true };
         } else {
-          const result = { done: false, value: itOldest.value };
-          itOldest = itOldest.next;
+          const result = { done: false, value: cursor.value };
+          cursor = cursor.next;
           return result;
         }
       }
     };
-  }
-
-  /**
-   * Copy the items of the queue to the given array arr, starting from index startIndex.
-   * First item in the array is first item inserted to the queue, and so forth.
-   * @param {any[]} arr
-   * @param {number} [startIndex=0]
-   * @returns {void}
-   */
-  copyTo (arr, startIndex) {
-    if (startIndex === undefined) {
-      startIndex = 0;
-    }
-    let index = startIndex;
-    for (const v of this) {
-      arr[index] = v;
-      index++;
-    }
-  }
-
-  /**
-   * Create an array with the same size as the queue, populate it with the items in the queue, keeping the iteration order, and return it.
-   * @returns {any[]}
-   */
-  toArray () {
-    const arr = new Array(this.size());
-    this.copyTo(arr, 0);
-    return arr;
   }
 
   /**
@@ -155,7 +152,7 @@ class LinkedQueue {
    * Iteration order is the insertion order: first inserted item would be returned first.
    *
    * @example
-   * const queue = new DynamicArrayQueue();
+   * const queue = new LinkedQueue();
    * queue.enqueue(123);
    * queue.enqueue(45);
    * for (let item of queue.drainingIterator()) {
@@ -167,7 +164,7 @@ class LinkedQueue {
    * // 45
    * // size = 0
    *
-   * @returns {{[Symbol.iterator]: (function(): {next: function(): ({done: boolean, value?: any})})}}
+   * @returns {Generator<T, void, unknown>}
    */
   drainingIterator () {
     const me = this;
@@ -188,13 +185,41 @@ class LinkedQueue {
   }
 
   /**
+   * Copy the items of the queue to the given array arr, starting from index startIndex.
+   * First item in the array is first item inserted to the queue, and so forth.
+   * @param {T[]} arr The target array
+   * @param {number} [startIndex=0] Starting index in the array
+   * @returns {void}
+   */
+  copyTo (arr, startIndex) {
+    if (startIndex === undefined) {
+      startIndex = 0;
+    }
+    let index = startIndex;
+    for (const v of this) {
+      arr[index] = v;
+      index++;
+    }
+  }
+
+  /**
+   * Create an array with the same size as the queue, populate it with the items in the queue, keeping the iteration order, and return it.
+   * @returns {T[]} Array containing all queue items
+   */
+  toArray () {
+    const arr = new Array(this.size());
+    this.copyTo(arr, 0);
+    return arr;
+  }
+
+  /**
    * Return a JSON representation (as a string) of the queue.
    * The queue is represented as an array: first item in the array is the first one inserted to the queue and so forth.
-   * @returns {string}
+   * @returns {string} JSON string representation
    */
   toJSON () {
     return JSON.stringify(this.toArray());
   }
 }
 
-module.exports = { LinkedQueue: LinkedQueue };
+module.exports = { LinkedQueue };

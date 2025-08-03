@@ -71,6 +71,8 @@ typings/
 # dotenv environment variables file
 .env
 .env.test
+.env.local
+.env.production
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -103,4 +105,43 @@ dist
 # TernJS port file
 .tern-port
 
+# IDEs and editors
 .idea
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+
+# Benchmark outputs
+benchmark/results/
+benchmark/output/
+*.benchmark.json
+
+# Testing artifacts
+test-results/
+.mocha-test-results
+
+# Package manager lockfiles (optional - choose one approach)
+# Uncomment if you want to ignore lockfiles:
+# package-lock.json
+# yarn.lock
+
+# Generated documentation
+docs/generated/
+
+# Local configuration
+.local
+.env.local.example

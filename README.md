@@ -71,6 +71,15 @@ Zero sized queue would throw an exception.
 Return the last inserted (or the "newest") item in the queue, without removing it from the queue.  
 Zero sized queue would throw an exception.
 
+### `peek ()`
+Return the first inserted (or the "oldest") item in the queue, without removing it from the queue.  
+This is an alias for `peekFirst()` and follows standard queue semantics.  
+Zero sized queue would throw an exception.
+
+### `isEmpty ()`
+Return `true` if the queue is empty, `false` otherwise.  
+This is equivalent to `size() === 0` but more expressive.
+
 ### `[Symbol.iterator] ()`
 Iterate over the items in the queue without changing the queue.  
 Iteration order is the insertion order: first inserted item would be returned first.  

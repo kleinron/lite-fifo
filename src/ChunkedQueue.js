@@ -1,14 +1,18 @@
+// noinspection JSUnusedGlobalSymbols
+
 const { LinkedQueue } = require('./LinkedQueue');
 const { CyclicQueue } = require('./CyclicQueue');
 const { bindMethods } = require('./util');
 
 /**
- * @type ChunkedQueue
+ * A high-performance queue implementation using linked chunks of cyclic queues.
+ * Provides excellent memory efficiency with reasonable throughput.
+ *
+ * @template T The type of items stored in the queue
  */
 class ChunkedQueue {
   /**
-   * @param {number} [chunkSize]
-   * @returns {ChunkedQueue}
+   * @param {number} [chunkSize=1024] Size of each internal chunk
    */
   constructor (chunkSize) {
     if (chunkSize === undefined) {
@@ -21,7 +25,10 @@ class ChunkedQueue {
     if (chunkSize <= 0) {
       throw new Error(`chunkSize must be positive (current value is ${chunkSize})`);
     }
+
+    /** @private */
     this._queue = new LinkedQueue();
+    /** @private */
     this._chunkSize = chunkSize;
     bindMethods.call(this);
   }
@@ -30,14 +37,13 @@ class ChunkedQueue {
    * Clear the queue.
    * @returns {void}
    */
-  // noinspection JSUnusedGlobalSymbols
   clear () {
     this._queue.clear();
   }
 
   /**
    * Add an item to the queue.
-   * @param {any} item
+   * @param {T} item The item to add
    * @returns {void}
    */
   enqueue (item) {
@@ -54,9 +60,13 @@ class ChunkedQueue {
 
   /**
    * Return the first inserted (or the "oldest") item in the queue, and removes it from the queue.
-   * @returns {any}
+   * @returns {T} The dequeued item
+   * @throws {Error} If the queue is empty
    */
   dequeue () {
+    if (this.size() === 0) {
+      throw new Error('Cannot dequeue from empty queue');
+    }
     const firstChunk = this._queue.peekFirst();
     const result = firstChunk.dequeue();
     if (firstChunk.size() === 0) {
@@ -86,20 +96,8 @@ class ChunkedQueue {
   }
 
   /**
-   * Return the last inserted (or the "newest") item in the queue, without removing it from the queue.
-   * @returns {any}
-   * @throws {Error} if the queue is empty
-   */
-  peekLast () {
-    if (this.size() === 0) {
-      throw new Error('cannot peek from an empty queue');
-    }
-    return this._queue.peekLast().peekLast();
-  }
-
-  /**
    * Return the first inserted (or the "oldest") item in the queue, without removing it from the queue.
-   * @returns {any}
+   * @returns {T} The oldest item
    * @throws {Error} if the queue is empty
    */
   peekFirst () {
@@ -110,12 +108,42 @@ class ChunkedQueue {
   }
 
   /**
+   * Return the oldest item without removing it from the queue.
+   * This is an alias for peekFirst() and the standard queue peek operation.
+   * @returns {T} The oldest item
+   * @throws {Error} if the queue is empty
+   */
+  peek () {
+    return this.peekFirst();
+  }
+
+  /**
+   * Return the last inserted (or the "newest") item in the queue, without removing it from the queue.
+   * @returns {T} The newest item
+   * @throws {Error} if the queue is empty
+   */
+  peekLast () {
+    if (this.size() === 0) {
+      throw new Error('cannot peek from an empty queue');
+    }
+    return this._queue.peekLast().peekLast();
+  }
+
+  /**
+   * Check if the queue is empty.
+   * @returns {boolean} True if the queue is empty
+   */
+  isEmpty () {
+    return this.size() === 0;
+  }
+
+  /**
    * Iterate over the items in the queue without changing the queue.
    * Iteration order is the insertion order: first inserted item would be returned first.
    * In essence this supports JS iterations of the pattern `for (let x of queue) { ... }.`
    *
    * @example
-   * const queue = new DynamicArrayQueue();
+   * const queue = new ChunkedQueue();
    * queue.enqueue(123);
    * queue.enqueue(45);
    * for (let item of queue) {
@@ -126,7 +154,7 @@ class ChunkedQueue {
    * // 45
    * // and the queue would remain unchanged
    *
-   * @returns {Generator<any, void, ?>}
+   * @returns {Generator<T, void, unknown>}
    */
   [Symbol.iterator] () {
     const queue = this._queue;
@@ -147,7 +175,7 @@ class ChunkedQueue {
    * Iteration order is the insertion order: first inserted item would be returned first.
    *
    * @example
-   * const queue = new DynamicArrayQueue();
+   * const queue = new ChunkedQueue();
    * queue.enqueue(123);
    * queue.enqueue(45);
    * for (let item of queue.drainingIterator()) {
@@ -159,7 +187,7 @@ class ChunkedQueue {
    * // 45
    * // size = 0
    *
-   * @returns {Generator<any, void, ?>}
+   * @returns {Generator<T, void, unknown>}
    */
   drainingIterator () {
     const queue = this._queue;
@@ -177,8 +205,8 @@ class ChunkedQueue {
   /**
    * Copy the items of the queue to the given array arr, starting from index startIndex.
    * First item in the array is first item inserted to the queue, and so forth.
-   * @param {any[]} arr
-   * @param {number} [startIndex=0]
+   * @param {T[]} arr The target array
+   * @param {number} [startIndex=0] Starting index in the array
    * @returns {void}
    */
   copyTo (arr, startIndex) {
@@ -194,7 +222,7 @@ class ChunkedQueue {
 
   /**
    * Create an array with the same size as the queue, populate it with the items in the queue, keeping the iteration order, and return it.
-   * @returns {any[]}
+   * @returns {T[]} Array containing all queue items
    */
   toArray () {
     const arr = new Array(this.size());
@@ -205,7 +233,7 @@ class ChunkedQueue {
   /**
    * Return a JSON representation (as a string) of the queue.
    * The queue is represented as an array: first item in the array is the first one inserted to the queue and so forth.
-   * @returns {string}
+   * @returns {string} JSON string representation
    */
   toJSON () {
     return JSON.stringify(this.toArray());
