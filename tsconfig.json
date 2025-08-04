@@ -9,6 +9,7 @@
     "emitDeclarationOnly": true,
     "declarationMap": true,
     "target": "es2015",
+    "lib": ["es2015", "es2017", "es2018", "dom"],
     "strict": true,
     "noImplicitAny": false,
     "skipLibCheck": true,
