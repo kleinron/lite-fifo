@@ -14,9 +14,9 @@ The following implementations are tested in the benchmarks:
 
 | Project                                                                                                                                            | Class              | Symbol                       |
 |----------------------------------------------------------------------------------------------------------------------------------------------------|--------------------|------------------------------|
-| lite-fifo 0.3.4 ([npm](https://www.npmjs.com/package/lite-fifo), [code](https://github.com/kleinron/lite-fifo))                                    | ChunkedQueue       | ChunkedQueue                 |
-| lite-fifo 0.3.4 ([npm](https://www.npmjs.com/package/lite-fifo), [code](https://github.com/kleinron/lite-fifo))                                    | DynamicCyclicQueue | DynamicCyclicQueue           |
-| lite-fifo 0.3.4 ([npm](https://www.npmjs.com/package/lite-fifo), [code](https://github.com/kleinron/lite-fifo))                                    | LinkedQueue        | LinkedQueue                  |
+| lite-fifo 1.0.1 ([npm](https://www.npmjs.com/package/lite-fifo), [code](https://github.com/kleinron/lite-fifo))                                    | ChunkedQueue       | ChunkedQueue                 |
+| lite-fifo 1.0.1 ([npm](https://www.npmjs.com/package/lite-fifo), [code](https://github.com/kleinron/lite-fifo))                                    | DynamicCyclicQueue | DynamicCyclicQueue           |
+| lite-fifo 1.0.1 ([npm](https://www.npmjs.com/package/lite-fifo), [code](https://github.com/kleinron/lite-fifo))                                    | LinkedQueue        | LinkedQueue                  |
 | @datastructures-js/queue 4.2.3 ([npm](https://www.npmjs.com/package/@datastructures-js/queue), [code](https://github.com/datastructures-js/queue)) | Queue              | DatastructuresJsQueue        |
 | mnemonist 0.39.8 ([npm](https://www.npmjs.com/package/mnemonist), [code](https://github.com/yomguithereal/mnemonist))                              | Queue              | MnemonistQueue               |
 | efficient-data-structures 0.1.310 ([npm](https://www.npmjs.com/package/efficient-data-structures), no repo)                                        | Queue              | EfficientDataStructuresQueue |
