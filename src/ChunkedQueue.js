@@ -5,10 +5,16 @@ const { CyclicQueue } = require('./CyclicQueue');
 const { bindMethods } = require('./util');
 
 /**
+ * @template T
+ * @typedef {import('./interfaces').QueueInterface<T>} QueueInterface
+ */
+
+/**
  * A high-performance queue implementation using linked chunks of cyclic queues.
  * Provides excellent memory efficiency with reasonable throughput.
  *
  * @template T The type of items stored in the queue
+ * @implements {QueueInterface<T>}
  */
 class ChunkedQueue {
   /**
@@ -26,9 +32,15 @@ class ChunkedQueue {
       throw new Error(`chunkSize must be positive (current value is ${chunkSize})`);
     }
 
-    /** @private */
+    /**
+     * @private
+     * @type {LinkedQueue<CyclicQueue<T>>}
+     */
     this._queue = new LinkedQueue();
-    /** @private */
+    /**
+     * @private
+     * @type {number}
+     */
     this._chunkSize = chunkSize;
     bindMethods.call(this);
   }
@@ -154,7 +166,7 @@ class ChunkedQueue {
    * // 45
    * // and the queue would remain unchanged
    *
-   * @returns {Generator<T, void, unknown>}
+   * @returns {IterableIterator<T>}
    */
   [Symbol.iterator] () {
     const queue = this._queue;
@@ -187,7 +199,7 @@ class ChunkedQueue {
    * // 45
    * // size = 0
    *
-   * @returns {Generator<T, void, unknown>}
+   * @returns {IterableIterator<T>}
    */
   drainingIterator () {
     const queue = this._queue;

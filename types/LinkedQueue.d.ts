@@ -1,21 +1,21 @@
+export type QueueInterface<T> = import("./interfaces").QueueInterface<T>;
+/**
+ * @template T
+ * @typedef {import('./interfaces').QueueInterface<T>} QueueInterface
+ */
 /**
  * A queue implementation using a singly-linked list.
  * Provides O(1) operations for all queue methods with unlimited capacity.
  *
  * @template T The type of items stored in the queue
+ * @implements {QueueInterface<T>}
  */
-export class LinkedQueue<T> {
+export class LinkedQueue<T> implements QueueInterface<T> {
     /**
      * Clear the queue.
      * @returns {void}
      */
     clear(): void;
-    /** @private */
-    private _newest;
-    /** @private */
-    private _oldest;
-    /** @private */
-    private _size;
     /**
      * Add an item to the queue.
      * @param {T} item The item to add
@@ -75,9 +75,9 @@ export class LinkedQueue<T> {
      * // 45
      * // size = 0
      *
-     * @returns {Generator<T, void, unknown>}
+     * @returns {IterableIterator<T>}
      */
-    drainingIterator(): Generator<T, void, unknown>;
+    drainingIterator(): IterableIterator<T>;
     /**
      * Copy the items of the queue to the given array arr, starting from index startIndex.
      * First item in the array is first item inserted to the queue, and so forth.
@@ -114,8 +114,7 @@ export class LinkedQueue<T> {
      * // 45
      * // and the queue would remain unchanged
      *
-     * @returns {Generator<T, void, unknown>}
+     * @returns {IterableIterator<T>}
      */
-    [Symbol.iterator](): Generator<T, void, unknown>;
+    [Symbol.iterator](): IterableIterator<T>;
 }
-//# sourceMappingURL=LinkedQueue.d.ts.map

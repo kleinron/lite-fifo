@@ -1,13 +1,21 @@
 /**
- * @return {void}
+ * Bind all prototype methods of `this` to the instance.
+ * Internal helper; not part of the public API.
+ *
+ * Implemented as a function expression so TypeScript does not emit a
+ * constructor/class declaration for this helper.
+ *
+ * @this {{ [key: string]: any }}
+ * @returns {void}
  */
-function bindMethods () {
-  Object.getOwnPropertyNames(Object.getPrototypeOf(this))
+const bindMethods = function bindMethods () {
+  const self = this;
+  Object.getOwnPropertyNames(Object.getPrototypeOf(self))
     .map(key => {
-      if (this[key] instanceof Function && key !== 'constructor') { this[key] = this[key].bind(this); }
+      if (self[key] instanceof Function && key !== 'constructor') { self[key] = self[key].bind(self); }
       return undefined;
     });
-}
+};
 
 /**
  * @param {any[]} arr

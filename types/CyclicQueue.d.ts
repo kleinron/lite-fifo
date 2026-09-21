@@ -1,29 +1,25 @@
+export type BoundedQueueInterface<T> = import("./interfaces").BoundedQueueInterface<T>;
+/**
+ * @template T
+ * @typedef {import('./interfaces').BoundedQueueInterface<T>} BoundedQueueInterface
+ */
 /**
  * A bounded queue implementation using a circular buffer (ring buffer).
  * Provides excellent performance with O(1) operations but has a fixed capacity.
  *
  * @template T The type of items stored in the queue
+ * @implements {BoundedQueueInterface<T>}
  */
-export class CyclicQueue<T> {
+export class CyclicQueue<T> implements BoundedQueueInterface<T> {
     /**
      * @param {number} [capacity=16] Maximum number of items the queue can hold
      */
     constructor(capacity?: number);
-    /** @private */
-    private _capacity;
     /**
      * Clear the queue.
      * @returns {void}
      */
     clear(): void;
-    /** @private */
-    private _arr;
-    /** @private */
-    private _size;
-    /** @private */
-    private _lastIndex;
-    /** @private */
-    private _firstIndex;
     /**
      * Return the maximum capacity of the queue.
      * @returns {number} The maximum capacity
@@ -41,12 +37,6 @@ export class CyclicQueue<T> {
      * @throws {Error} If the capacity is exceeded
      */
     enqueue(item: T): void;
-    /**
-     * @private
-     * @param {number} val
-     * @returns {number}
-     */
-    private _increaseMod;
     /**
      * Return the first inserted (or the "oldest") item in the queue, and removes it from the queue.
      * @returns {T} The dequeued item
@@ -95,9 +85,9 @@ export class CyclicQueue<T> {
      * // 45
      * // size = 0
      *
-     * @returns {Generator<T, void, unknown>}
+     * @returns {IterableIterator<T>}
      */
-    drainingIterator(): Generator<T, void, unknown>;
+    drainingIterator(): IterableIterator<T>;
     /**
      * Copy the items of the queue to the given array arr, starting from index startIndex.
      * First item in the array is first item inserted to the queue, and so forth.
@@ -134,8 +124,7 @@ export class CyclicQueue<T> {
      * // 45
      * // and the queue would remain unchanged
      *
-     * @returns {Generator<T, void, unknown>}
+     * @returns {IterableIterator<T>}
      */
-    [Symbol.iterator](): Generator<T, void, unknown>;
+    [Symbol.iterator](): IterableIterator<T>;
 }
-//# sourceMappingURL=CyclicQueue.d.ts.map

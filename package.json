@@ -4,6 +4,14 @@
   "license": "MIT",
   "main": "src/index.js",
   "types": "types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "require": "./src/index.js",
+      "default": "./src/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "src/",
     "types/",
@@ -21,10 +29,11 @@
   "scripts": {
     "lint": "semistandard",
     "lint-with-fix": "semistandard --fix",
-    "test": "mocha test/ --recursive --check-leaks --require test/src/setup.js",
-    "test-stress": "export STRESS_TESTS_ENABLED=true && export STRESS_TESTS_COUNT=10000 && mocha test/ --recursive --check-leaks --require test/src/setup.js",
-    "types": "node ./node_modules/typescript/bin/tsc",
-    "ci": "npm run lint && npm run test && npm run types",
+    "test": "mocha test/src --recursive --check-leaks --require test/src/setup.js",
+    "test-stress": "export STRESS_TESTS_ENABLED=true && export STRESS_TESTS_COUNT=10000 && mocha test/src --recursive --check-leaks --require test/src/setup.js",
+    "types": "node ./node_modules/typescript/bin/tsc && node ./scripts/strip-private-dts.js",
+    "test-types": "node ./node_modules/typescript/bin/tsc -p test/types",
+    "ci": "npm run lint && npm run test && npm run types && npm run test-types",
     "prepack": "npm run ci && npm run test-stress",
     "prepublishOnly": "npm run ci && npm pack --dry-run",
     "publish-check": "npm run ci && npm pack --dry-run && echo '✅ Ready to publish!'",

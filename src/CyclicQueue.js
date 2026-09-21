@@ -3,10 +3,16 @@
 const { bindMethods } = require('./util');
 
 /**
+ * @template T
+ * @typedef {import('./interfaces').BoundedQueueInterface<T>} BoundedQueueInterface
+ */
+
+/**
  * A bounded queue implementation using a circular buffer (ring buffer).
  * Provides excellent performance with O(1) operations but has a fixed capacity.
  *
  * @template T The type of items stored in the queue
+ * @implements {BoundedQueueInterface<T>}
  */
 class CyclicQueue {
   /**
@@ -20,7 +26,10 @@ class CyclicQueue {
       throw new Error('capacity must a number');
     }
 
-    /** @private */
+    /**
+     * @private
+     * @type {number}
+     */
     this._capacity = Math.floor(capacity);
     if (capacity <= 0) {
       throw new Error(`capacity must be positive (current value is ${capacity})`);
@@ -34,13 +43,25 @@ class CyclicQueue {
    * @returns {void}
    */
   clear () {
-    /** @private */
+    /**
+     * @private
+     * @type {Array<T | null>}
+     */
     this._arr = new Array(this._capacity);
-    /** @private */
+    /**
+     * @private
+     * @type {number}
+     */
     this._size = 0;
-    /** @private */
+    /**
+     * @private
+     * @type {number}
+     */
     this._lastIndex = 0;
-    /** @private */
+    /**
+     * @private
+     * @type {number}
+     */
     this._firstIndex = 0;
   }
 
@@ -162,7 +183,7 @@ class CyclicQueue {
    * // 45
    * // and the queue would remain unchanged
    *
-   * @returns {Generator<T, void, unknown>}
+   * @returns {IterableIterator<T>}
    */
   [Symbol.iterator] () {
     let firstIndex = this._firstIndex;
@@ -202,7 +223,7 @@ class CyclicQueue {
    * // 45
    * // size = 0
    *
-   * @returns {Generator<T, void, unknown>}
+   * @returns {IterableIterator<T>}
    */
   drainingIterator () {
     const me = this;
