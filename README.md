@@ -22,6 +22,17 @@ it's clear that this project's flagship `ChunkedQueue` has the lowest RAM usage,
 npm install lite-fifo
 ```
 
+## Upgrading to 2.0.0
+
+**2.0.0 is a breaking major for TypeScript consumers and for anyone who imported internals.** The runtime public API of the five queue classes is unchanged for normal `require('lite-fifo')` / named imports (`enqueue`, `dequeue`, `toJSON()`, and the rest of the documented methods).
+
+Breaking changes:
+
+* **`exports` restricts deep imports.** Only the package entry (`.`) and `./package.json` are exported. `require('lite-fifo/src/ChunkedQueue')` and similar subpath imports no longer resolve.
+* **`QueueInterface` is a real generic interface**, not effectively `any`. Code that treated queue items as untyped, or that called `QueueInterface` without a type argument, may now fail typecheck.
+* **Iterator return types are `IterableIterator<T>`**, not `Generator<...>`.
+* **`types/util.d.ts` is removed** (internal `bindMethods` / `swap` helpers). Private fields (`_arr`, `_queue`, …) are no longer in the published `.d.ts`.
+
 ## Usage
 ```javascript
 const { ChunkedQueue } = require('lite-fifo');
@@ -37,6 +48,26 @@ console.log(queue.toJSON());
 const temp = queue.dequeue(); // holds 123
 console.log(queue.toJSON());
 // => [ 45, 67 ]
+```
+
+TypeScript consumers get generics and shared queue interfaces from the package entry:
+
+```typescript
+import { ChunkedQueue, CyclicQueue, QueueInterface, BoundedQueueInterface } from 'lite-fifo';
+
+const queue = new ChunkedQueue<number>();
+queue.enqueue(123);
+
+function drain (q: QueueInterface<number>) {
+  while (!q.isEmpty()) {
+    q.dequeue();
+  }
+}
+
+drain(queue);
+
+const bounded: BoundedQueueInterface<string> = new CyclicQueue<string>(16);
+bounded.enqueue('ok');
 ```
 
 # API

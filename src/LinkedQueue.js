@@ -3,10 +3,16 @@
 const { bindMethods } = require('./util');
 
 /**
+ * @template T
+ * @typedef {import('./interfaces').QueueInterface<T>} QueueInterface
+ */
+
+/**
  * A queue implementation using a singly-linked list.
  * Provides O(1) operations for all queue methods with unlimited capacity.
  *
  * @template T The type of items stored in the queue
+ * @implements {QueueInterface<T>}
  */
 class LinkedQueue {
   /**
@@ -22,11 +28,20 @@ class LinkedQueue {
    * @returns {void}
    */
   clear () {
-    /** @private */
+    /**
+     * @private
+     * @type {{ value: T, next: any } | null}
+     */
     this._newest = null;
-    /** @private */
+    /**
+     * @private
+     * @type {{ value: T, next: any } | null}
+     */
     this._oldest = null;
-    /** @private */
+    /**
+     * @private
+     * @type {number}
+     */
     this._size = 0;
   }
 
@@ -129,7 +144,7 @@ class LinkedQueue {
    * // 45
    * // and the queue would remain unchanged
    *
-   * @returns {Generator<T, void, unknown>}
+   * @returns {IterableIterator<T>}
    */
   [Symbol.iterator] () {
     let cursor = this._oldest;
@@ -164,7 +179,7 @@ class LinkedQueue {
    * // 45
    * // size = 0
    *
-   * @returns {Generator<T, void, unknown>}
+   * @returns {IterableIterator<T>}
    */
   drainingIterator () {
     const me = this;

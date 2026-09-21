@@ -3,18 +3,27 @@
 const { bindMethods } = require('./util');
 
 /**
+ * @template T
+ * @typedef {import('./interfaces').QueueInterface<T>} QueueInterface
+ */
+
+/**
  * A simple queue implementation using a dynamic array with push and shift operations.
  * WARNING: This implementation does not scale well due to O(n) shift operations.
  * Use for small queues only or when simplicity is more important than performance.
  *
  * @template T The type of items stored in the queue
+ * @implements {QueueInterface<T>}
  */
 class DynamicArrayQueue {
   /**
    * Create a new DynamicArrayQueue instance.
    */
   constructor () {
-    /** @private */
+    /**
+     * @private
+     * @type {T[]}
+     */
     this._arr = [];
     bindMethods.call(this);
   }
@@ -116,7 +125,7 @@ class DynamicArrayQueue {
    * // 45
    * // and the queue would remain unchanged
    *
-   * @returns {Generator<T, void, unknown>}
+   * @returns {IterableIterator<T>}
    */
   [Symbol.iterator] () {
     const arr = this._arr;
@@ -150,7 +159,7 @@ class DynamicArrayQueue {
    * // 45
    * // size = 0
    *
-   * @returns {Generator<T, void, unknown>}
+   * @returns {IterableIterator<T>}
    */
   drainingIterator () {
     const me = this;

@@ -1,57 +1,36 @@
+export type QueueInterface<T> = import("./interfaces").QueueInterface<T>;
+/**
+ * @template T
+ * @typedef {import('./interfaces').QueueInterface<T>} QueueInterface
+ */
 /**
  * A queue implementation using a dynamic circular buffer that can expand when full.
  * Provides O(1) amortized operations with unlimited capacity.
  *
  * @template T The type of items stored in the queue
+ * @implements {QueueInterface<T>}
  */
-export class DynamicCyclicQueue<T> {
+export class DynamicCyclicQueue<T> implements QueueInterface<T> {
     /**
      * @param {number} [initialCapacity=16] Initial capacity of the underlying array
      */
     constructor(initialCapacity?: number);
-    /** @private */
-    private _capacity;
     /**
      * Clear the queue.
      * @returns {void}
      */
     clear(): void;
-    /** @private */
-    private _arr;
-    /** @private */
-    private _size;
-    /** @private */
-    private _lastIndex;
-    /** @private */
-    private _firstIndex;
     /**
      * Return the current size of the queue.
      * @returns {number}
      */
     size(): number;
     /**
-     * @private
-     * @returns {void}
-     */
-    private _expand;
-    /**
-     * @private
-     * @param {number} newCapacity
-     * @returns {void}
-     */
-    private _reorderAndExpand;
-    /**
      * Add an item to the queue.
      * @param {T} item The item to add
      * @returns {void}
      */
     enqueue(item: T): void;
-    /**
-     * @private
-     * @param {number} val
-     * @returns {number}
-     */
-    private _increaseMod;
     /**
      * Return the first inserted (or the "oldest") item in the queue, and removes it from the queue.
      * @returns {T} The dequeued item
@@ -100,9 +79,9 @@ export class DynamicCyclicQueue<T> {
      * // 45
      * // size = 0
      *
-     * @returns {Generator<T, void, unknown>}
+     * @returns {IterableIterator<T>}
      */
-    drainingIterator(): Generator<T, void, unknown>;
+    drainingIterator(): IterableIterator<T>;
     /**
      * Copy the items of the queue to the given array arr, starting from index startIndex.
      * First item in the array is first item inserted to the queue, and so forth.
@@ -139,8 +118,7 @@ export class DynamicCyclicQueue<T> {
      * // 45
      * // and the queue would remain unchanged
      *
-     * @returns {Generator<T, void, unknown>}
+     * @returns {IterableIterator<T>}
      */
-    [Symbol.iterator](): Generator<T, void, unknown>;
+    [Symbol.iterator](): IterableIterator<T>;
 }
-//# sourceMappingURL=DynamicCyclicQueue.d.ts.map

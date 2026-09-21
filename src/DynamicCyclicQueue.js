@@ -5,10 +5,16 @@ const MAX_ARRAY_SIZE = 4294967295;
 const MIN_INITIAL_CAPACITY = 4;
 
 /**
+ * @template T
+ * @typedef {import('./interfaces').QueueInterface<T>} QueueInterface
+ */
+
+/**
  * A queue implementation using a dynamic circular buffer that can expand when full.
  * Provides O(1) amortized operations with unlimited capacity.
  *
  * @template T The type of items stored in the queue
+ * @implements {QueueInterface<T>}
  */
 class DynamicCyclicQueue {
   /**
@@ -22,7 +28,10 @@ class DynamicCyclicQueue {
       throw new Error('initialCapacity must a number');
     }
 
-    /** @private */
+    /**
+     * @private
+     * @type {number}
+     */
     this._capacity = Math.floor(initialCapacity);
     if (initialCapacity <= MIN_INITIAL_CAPACITY) {
       throw new Error(`initialCapacity must be greater than ${MIN_INITIAL_CAPACITY} (current value is ${initialCapacity})`);
@@ -36,13 +45,25 @@ class DynamicCyclicQueue {
    * @returns {void}
    */
   clear () {
-    /** @private */
+    /**
+     * @private
+     * @type {Array<T | null>}
+     */
     this._arr = new Array(this._capacity);
-    /** @private */
+    /**
+     * @private
+     * @type {number}
+     */
     this._size = 0;
-    /** @private */
+    /**
+     * @private
+     * @type {number}
+     */
     this._lastIndex = 0;
-    /** @private */
+    /**
+     * @private
+     * @type {number}
+     */
     this._firstIndex = 0;
   }
 
@@ -180,7 +201,7 @@ class DynamicCyclicQueue {
    * // 45
    * // and the queue would remain unchanged
    *
-   * @returns {Generator<T, void, unknown>}
+   * @returns {IterableIterator<T>}
    */
   [Symbol.iterator] () {
     let firstIndex = this._firstIndex;
@@ -220,7 +241,7 @@ class DynamicCyclicQueue {
    * // 45
    * // size = 0
    *
-   * @returns {Generator<T, void, unknown>}
+   * @returns {IterableIterator<T>}
    */
   drainingIterator () {
     const me = this;

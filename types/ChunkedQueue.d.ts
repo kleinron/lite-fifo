@@ -1,18 +1,20 @@
+export type QueueInterface<T> = import("./interfaces").QueueInterface<T>;
+/**
+ * @template T
+ * @typedef {import('./interfaces').QueueInterface<T>} QueueInterface
+ */
 /**
  * A high-performance queue implementation using linked chunks of cyclic queues.
  * Provides excellent memory efficiency with reasonable throughput.
  *
  * @template T The type of items stored in the queue
+ * @implements {QueueInterface<T>}
  */
-export class ChunkedQueue<T> {
+export class ChunkedQueue<T> implements QueueInterface<T> {
     /**
      * @param {number} [chunkSize=1024] Size of each internal chunk
      */
     constructor(chunkSize?: number);
-    /** @private */
-    private _queue;
-    /** @private */
-    private _chunkSize;
     /**
      * Clear the queue.
      * @returns {void}
@@ -77,9 +79,9 @@ export class ChunkedQueue<T> {
      * // 45
      * // size = 0
      *
-     * @returns {Generator<T, void, unknown>}
+     * @returns {IterableIterator<T>}
      */
-    drainingIterator(): Generator<T, void, unknown>;
+    drainingIterator(): IterableIterator<T>;
     /**
      * Copy the items of the queue to the given array arr, starting from index startIndex.
      * First item in the array is first item inserted to the queue, and so forth.
@@ -116,8 +118,7 @@ export class ChunkedQueue<T> {
      * // 45
      * // and the queue would remain unchanged
      *
-     * @returns {Generator<T, void, unknown>}
+     * @returns {IterableIterator<T>}
      */
-    [Symbol.iterator](): Generator<T, void, unknown>;
+    [Symbol.iterator](): IterableIterator<T>;
 }
-//# sourceMappingURL=ChunkedQueue.d.ts.map
